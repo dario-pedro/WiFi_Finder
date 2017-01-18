@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+
+
+    <!-- author -->
+    <string name="author1" translatable="false">Dário Pedro</string>
+    <string name="email_author2" translatable="false">df.pedro@campus.fct.unl.pt</string>
+
     <!-- application start -->
     <string name="app_name">WiFi Finder</string>
     <string name="app_company_name" translatable="false">FCT</string>
