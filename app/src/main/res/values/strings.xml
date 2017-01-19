@@ -136,6 +136,7 @@
     <string name="theme_key" translatable="false">theme</string>
     <string name="theme_default" translatable="false">0</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_maps">Maps</string>
 
 
     <!-- settings end -->

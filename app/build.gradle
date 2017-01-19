@@ -81,10 +81,12 @@ dependencies {
     compile 'com.android.support:design:25.1.0'
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'com.jjoe64:graphview:4.2.1'
+    //Google Maps
+    compile 'com.google.android.gms:play-services:10.0.1'
     //Google Account Connection
-    compile 'com.google.android.gms:play-services-ads:9.2.0'
-    compile 'com.google.android.gms:play-services-auth:9.2.0'
-    compile 'com.google.android.gms:play-services-gcm:9.2.0'
+    compile 'com.google.android.gms:play-services-ads:10.0.1'
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
+    compile 'com.google.android.gms:play-services-gcm:10.0.1'
     // Unit Test Dependencies
     testCompile 'junit:junit:4.12'
     testCompile 'org.powermock:powermock-module-junit4:1.6.6'
