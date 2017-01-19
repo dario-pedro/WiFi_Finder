@@ -19,9 +19,9 @@
 package com.vrem.wifianalyzer.navigation;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.*;
 import android.view.MenuItem;
 
+import com.vrem.wifianalyzer.login.LoginActivity;
 import com.vrem.wifianalyzer.MainActivity;
 import com.vrem.wifianalyzer.R;
 import com.vrem.wifianalyzer.contacts.ContactsFragment;
@@ -34,6 +34,7 @@ import com.vrem.wifianalyzer.wifi.graph.channel.ChannelGraphFragment;
 import com.vrem.wifianalyzer.wifi.graph.time.TimeGraphFragment;
 
 public enum NavigationMenu {
+    LOGIN(R.drawable.ic_settings_grey_500_48dp, R.string.action_login, new ActivityItem(LoginActivity.class)),
     ACCESS_POINTS(R.drawable.ic_network_wifi_grey_500_48dp, R.string.action_access_points, true, new FragmentItem(new AccessPointsFragment())),
     CHANNEL_RATING(R.drawable.ic_wifi_tethering_grey_500_48dp, R.string.action_channel_rating, true, new FragmentItem(new ChannelRatingFragment())),
     CHANNEL_GRAPH(R.drawable.ic_insert_chart_grey_500_48dp, R.string.action_channel_graph, true, new FragmentItem(new ChannelGraphFragment())),

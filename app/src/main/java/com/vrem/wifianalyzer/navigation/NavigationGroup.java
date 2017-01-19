@@ -22,6 +22,7 @@ import android.support.annotation.NonNull;
 
 public enum NavigationGroup {
     GROUP_FEATURE(NavigationMenu.ACCESS_POINTS, NavigationMenu.CHANNEL_RATING, NavigationMenu.CHANNEL_GRAPH, NavigationMenu.TIME_GRAPH),
+    GROUP_LOGIN(NavigationMenu.LOGIN),
     GROUP_OTHER(NavigationMenu.EXPORT, NavigationMenu.CHANNEL_AVAILABLE, NavigationMenu.VENDOR_LIST),
     GROUP_SETTINGS(NavigationMenu.SETTINGS,NavigationMenu.ACCESS_POINTS.CONTACTS);
 
