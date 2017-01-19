@@ -21,8 +21,8 @@ package com.vrem.wifianalyzer.settings;
 import com.vrem.wifianalyzer.R;
 
 public enum ThemeStyle {
-    DARK(R.style.ThemeAppCompatDark, R.style.ThemeDeviceDefaultDark),
-    LIGHT(R.style.ThemeAppCompatLight, R.style.ThemeDeviceDefaultLight);
+    LIGHT(R.style.ThemeAppCompatLight, R.style.ThemeDeviceDefaultLight),
+    DARK(R.style.ThemeAppCompatDark, R.style.ThemeDeviceDefaultDark);
 
     private final int themeAppCompatStyle;
     private final int themeDeviceDefaultStyle;
@@ -34,7 +34,7 @@ public enum ThemeStyle {
 
     public static ThemeStyle find(int index) {
         if (index < 0 || index >= values().length) {
-            return DARK;
+            return LIGHT;
         }
         return values()[index];
 

@@ -30,6 +30,7 @@
     <string name="action_login">Log in</string>
     <string name="action_logout">Log out</string>
     <string name="action_register">Register</string>
+    <string name="action_gmaps">Localization</string>
 
     <string name="button_ok" translatable="false">OK</string>
     <string name="button_cancel">Cancel</string>
