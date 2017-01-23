@@ -27,6 +27,7 @@ import com.vrem.wifianalyzer.R;
 import com.vrem.wifianalyzer.contacts.ContactsFragment;
 //import com.vrem.wifianalyzer.maps.MapsActivity;
 import com.vrem.wifianalyzer.maps.MapsActivity;
+import com.vrem.wifianalyzer.sensor_fusion.SensorSelectionActivity;
 import com.vrem.wifianalyzer.settings.SettingActivity;
 import com.vrem.wifianalyzer.vendor.VendorFragment;
 import com.vrem.wifianalyzer.wifi.AccessPointsFragment;
@@ -43,6 +44,7 @@ public enum NavigationMenu {
 
     ACCESS_POINTS(R.drawable.ic_network_wifi_grey_500_48dp, R.string.action_access_points, true, new FragmentItem(new AccessPointsFragment())),
     GOOGLE_MAPS(R.drawable.ic_media_play, R.string.action_gmaps, new ActivityItem(MapsActivity.class)),
+    SENSOR_FUSION(R.drawable.ic_developer_mode_black_24dp, R.string.action_sensorf, new ActivityItem(SensorSelectionActivity.class)),
     CHANNEL_RATING(R.drawable.ic_wifi_tethering_grey_500_48dp, R.string.action_channel_rating, true, new FragmentItem(new ChannelRatingFragment())),
     CHANNEL_GRAPH(R.drawable.ic_insert_chart_grey_500_48dp, R.string.action_channel_graph, true, new FragmentItem(new ChannelGraphFragment())),
     TIME_GRAPH(R.drawable.ic_show_chart_grey_500_48dp, R.string.action_time_graph, true, new FragmentItem(new TimeGraphFragment())),
