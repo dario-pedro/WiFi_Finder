@@ -52,6 +52,18 @@ public class Settings {
         repository.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
     }
 
+
+
+    public int getStepLength(){
+        return repository.getInteger(R.string.step_length_key,R.integer.step_length_default);
+    }
+
+    public int getStepWeight(){
+        return repository.getInteger(R.string.weight_key,R.integer.weight_default);
+    }
+
+
+
     public int getScanInterval() {
         return repository.getInteger(R.string.scan_interval_key, repository.getResourceInteger(R.integer.scan_interval_default));
     }

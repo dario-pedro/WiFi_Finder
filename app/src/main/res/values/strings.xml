@@ -104,8 +104,21 @@
     <string name="gyroscope_missing_message">Your device has no hardware gyroscope sensor, which would be necessary for this app to work properly. Please run it on a newer device that has a gyroscope.</string>
     <string name="OK">OK</string>
 
-
-
+    <!-- step counte start -->
+    <string name="step_number">Step count</string>
+    <string name="step_length">Step Size:</string>
+    <string name="velocity">Speed</string>
+    <string name="step_unit"> </string>
+    <string name="kg">kg</string>
+    <string name="ms">ms</string>
+    <string name="cm">cm</string>
+    <string name="m">m</string>
+    <string name="distance">Distance</string>
+    <string name="zero">0</string>
+    <string name="double_zero">0.0</string>
+    <string name="calories_zero">0.0</string>
+    <string name="velocity_zero">0.0</string>
+    <string name="sensoring">Accelerometer</string>
 
 
     <!-- settings start -->
