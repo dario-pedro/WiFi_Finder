@@ -4,15 +4,19 @@
     android:layout_height="match_parent"
     tools:context=".steps.StepCounterActivity" >
 
+
+
+    <!--   ACCELEROMETER  -->
+
+
     <LinearLayout
-        android:id="@+id/show_step_row"
+        android:id="@+id/show_step_accell_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_marginBottom="5dip"
         android:layout_marginLeft="15dip"
         android:layout_marginRight="15dip"
-        android:layout_marginTop="1dip"
+        android:layout_marginTop="35dip"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:background="@drawable/step_bg_shape">
@@ -20,16 +24,17 @@
         <TextView
             style="@style/small_text_style"
             android:gravity="right"
-            android:text="@string/sensoring"
+            android:text="@string/sensor_accelarometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/show_step_accell_row_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/show_step_row"
+        android:layout_below="@id/show_step_accell_row"
         android:layout_marginLeft="15dip"
         android:layout_marginRight="15dip"
         android:background="@drawable/step_bg_shape"
@@ -98,7 +103,7 @@
                 <TextView
                     style="@style/small_text_style"
                     android:gravity="right"
-                    android:text="@string/cm"
+                    android:text="@string/m"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </TableRow>
@@ -130,6 +135,273 @@
             </TableRow>
         </TableLayout>
     </LinearLayout>
+
+
+    <!--   STEP DETECTOR  -->
+
+
+    <LinearLayout
+        android:id="@+id/show_step_detector_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="5dip"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
+        android:layout_marginTop="35dip"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_below="@id/show_step_accell_row_data"
+        android:background="@drawable/step_bg_shape">
+
+        <TextView
+            style="@style/small_text_style"
+            android:gravity="right"
+            android:text="@string/sensor_step_detector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/show_step_detector_row_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/show_step_detector_row"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
+        android:background="@drawable/step_bg_shape"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingBottom="10dip"
+        android:paddingLeft="15dip"
+        android:paddingRight="15dip"
+        android:paddingTop="10dip" >
+
+
+        <TableLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip"
+            android:stretchColumns="1" >
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/step_counter_detec"
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:text="@string/step_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/show_step_detec"
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:text="@string/step_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    style="@style/small_text_style"
+                    android:text="@string/distance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@id/distance"
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:text="@string/m"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    style="@style/small_text_style"
+                    android:text="@string/velocity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/velocity_detector"
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:text="@string/ms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+
+    <!--   STEP COUNTER  -->
+
+
+    <LinearLayout
+        android:id="@+id/show_step_counter_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="5dip"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
+        android:layout_marginTop="35dip"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_below="@id/show_step_detector_row_data"
+        android:background="@drawable/step_bg_shape">
+
+        <TextView
+            style="@style/small_text_style"
+            android:gravity="right"
+            android:text="@string/sensor_step_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/show_step_counter_row_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/show_step_counter_row"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
+        android:background="@drawable/step_bg_shape"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingBottom="10dip"
+        android:paddingLeft="15dip"
+        android:paddingRight="15dip"
+        android:paddingTop="10dip" >
+
+
+        <TableLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip"
+            android:stretchColumns="1" >
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/step_counter_counter"
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:text="@string/step_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/show_step_counter"
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:text="@string/step_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    style="@style/small_text_style"
+                    android:text="@string/distance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@id/distance"
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:text="@string/m"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    style="@style/small_text_style"
+                    android:text="@string/velocity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/velocity_counter"
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    style="@style/small_text_style"
+                    android:gravity="right"
+                    android:text="@string/ms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
 
 
 

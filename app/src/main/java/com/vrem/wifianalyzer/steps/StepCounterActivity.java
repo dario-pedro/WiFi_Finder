@@ -1,20 +1,10 @@
 package com.vrem.wifianalyzer.steps;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 
@@ -22,28 +12,41 @@ import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
 
 import java.text.DecimalFormat;
-import java.util.Calendar;
-
 
 public class StepCounterActivity extends Activity {
 
-    private Double distance = 0.0;
-    private Double velocity = 0.0;
+    private Double distance_accel = 0.0;
+    private Double velocity_accel = 0.0;
+    private int total_step_accel = 0;
+    private TextView step_counter_accel;
+    private TextView tv_distance_accel;
+    private TextView tv_velocity_accel;
+    private TextView tv_show_step_accel;
+
+    private Double distance_detector = 0.0;
+    private Double velocity_detector = 0.0;
+    private int total_step_detector = 0;
+    private TextView step_counter_detector;
+    private TextView tv_distance_detector;
+    private TextView tv_velocity_detector;
+    private TextView tv_show_step_detector;
+
+    private Double distance_counter = 0.0;
+    private Double velocity_counter = 0.0;
+    private int total_step_counter = 0;
+    private TextView step_counter_counter;
+    private TextView tv_distance_counter;
+    private TextView tv_velocity_counter;
+    private TextView tv_show_step_counter;
 
     private int step_length = 0;
     private int weight = 0;
-    private int total_step = 0;
 
     private Thread thread;
 
     private long timer = 0;
     private  long startTimer = 0;
     private  long tempTime = 0;
-
-    private TextView step_counter;
-    private TextView tv_distance;
-    private TextView tv_velocity;
-    private TextView tv_show_step;
 
     private boolean mKeepRunning = false;
 
@@ -56,22 +59,19 @@ public class StepCounterActivity extends Activity {
 
             countDistance();
 
-            if (timer != 0 && distance != 0.0) {
+            if (timer != 0 && distance_accel != 0.0) {
 
-
-                //calories = weight * distance * 0.001;
-                velocity = distance * 1000 / timer;
+                velocity_accel = distance_accel * 1000 / timer;
             } else {
-                //calories = 0.0;
-                velocity = 0.0;
+                velocity_accel = 0.0;
             }
 
             countStep();
 
-            tv_show_step.setText(total_step + "");
+            tv_show_step_accel.setText(total_step_accel + "");
 
-            tv_distance.setText(formatDouble(distance));
-            tv_velocity.setText(formatDouble(velocity));
+            tv_distance_accel.setText(formatDouble(distance_accel));
+            tv_velocity_accel.setText(formatDouble(velocity_accel));
 
         }
 
@@ -108,10 +108,14 @@ public class StepCounterActivity extends Activity {
                             if (temp != StepAccel.CURRENT_STEP) {
                                 temp = StepAccel.CURRENT_STEP;
                             }
+
+
+
                             if (startTimer != System.currentTimeMillis()) {
-                                timer = tempTime + System.currentTimeMillis()
-                                        - startTimer;
+                                timer = tempTime + System.currentTimeMillis()- startTimer;
                             }
+
+
 
                             handler.sendMessage(msg);
                         }
@@ -134,13 +138,13 @@ public class StepCounterActivity extends Activity {
 
 
     private void addView() {
-        tv_show_step = (TextView) this.findViewById(R.id.show_step);
+        tv_show_step_accel = (TextView) this.findViewById(R.id.show_step);
 
-        tv_distance = (TextView) this.findViewById(R.id.distance);
-        tv_velocity = (TextView) this.findViewById(R.id.velocity);
+        tv_distance_accel = (TextView) this.findViewById(R.id.distance);
+        tv_velocity_accel = (TextView) this.findViewById(R.id.velocity);
 
 
-        step_counter = (TextView)findViewById(R.id.step_counter);
+        step_counter_accel = (TextView)findViewById(R.id.step_counter);
 
 
         Intent service = new Intent(this, StepCounterService.class);
@@ -149,9 +153,9 @@ public class StepCounterActivity extends Activity {
         StepDetector.CURRENT_STEP = 0;
         startTimer = System.currentTimeMillis();
         tempTime = timer;
-        tv_show_step.setText("0");
-        tv_distance.setText(formatDouble(0.0));
-        tv_velocity.setText(formatDouble(0.0));
+        tv_show_step_accel.setText("0");
+        tv_distance_accel.setText(formatDouble(0.0));
+        tv_velocity_accel.setText(formatDouble(0.0));
 
         handler.removeCallbacks(thread);
 
@@ -165,17 +169,17 @@ public class StepCounterActivity extends Activity {
         step_length = MainContext.INSTANCE.getSettings().getStepLength();
         weight = MainContext.INSTANCE.getSettings().getStepWeight();
 
-        countDistance();
-        countStep();
+        distance_accel = 0.0;
+        total_step_accel = 0;
 
-        velocity = ((timer += tempTime) != 0 && distance != 0.0) ? velocity = distance * 1000 / timer : 0.0;
+        velocity_accel = ((timer += tempTime) != 0 && distance_accel != 0.0) ? velocity_accel = distance_accel * 1000 / timer : 0.0;
 
-        //calories = weight * distance * 0.001; : 0
+        //calories = weight * distance_accel * 0.001; : 0
 
-        tv_distance.setText(formatDouble(distance));
-        tv_velocity.setText(formatDouble(velocity));
+        tv_distance_accel.setText(formatDouble(distance_accel));
+        tv_velocity_accel.setText(formatDouble(velocity_accel));
 
-        tv_show_step.setText(total_step + "");
+        tv_show_step_accel.setText(total_step_accel + "");
 
     }
 
@@ -190,17 +194,61 @@ public class StepCounterActivity extends Activity {
         super.onDestroy();
     }
 
-    private void countDistance() {
-        if (StepDetector.CURRENT_STEP % 2 == 0) {
-            distance = (StepAccel.CURRENT_STEP / 2) * 3 * step_length * 0.01;
-        } else {
-            distance = ((StepAccel.CURRENT_STEP / 2) * 3 + 1) * step_length * 0.01;
+    private void countDistance(){
+        countDistance(R.string.sensor_accelarometer);
+        countDistance(R.string.sensor_step_detector);
+        countDistance(R.string.sensor_step_counter);
+    }
+
+    private void countStep() {
+        countStep(R.string.sensor_accelarometer);
+        countStep(R.string.sensor_step_detector);
+        countStep(R.string.sensor_step_counter);
+    }
+
+    private void countDistance(int sensor) {
+
+        switch (sensor)
+        {
+            case R.string.sensor_accelarometer:
+                if (StepDetector.CURRENT_STEP % 2 == 0) {
+                    distance_accel = (StepAccel.CURRENT_STEP / 2) * 3 * step_length * 0.01;
+                } else {
+                    distance_accel = ((StepAccel.CURRENT_STEP / 2) * 3 + 1) * step_length * 0.01;
+                }
+                break;
+            case R.string.sensor_step_detector:
+                if (StepDetector.CURRENT_STEP % 2 == 0) {
+                    distance_accel = (StepAccel.CURRENT_STEP / 2) * 3 * step_length * 0.01;
+                } else {
+                    distance_accel = ((StepAccel.CURRENT_STEP / 2) * 3 + 1) * step_length * 0.01;
+                }
+                break;
+            case R.string.sensor_step_counter:
+                if (StepDetector.CURRENT_STEP % 2 == 0) {
+                    distance_accel = (StepAccel.CURRENT_STEP / 2) * 3 * step_length * 0.01;
+                } else {
+                    distance_accel = ((StepAccel.CURRENT_STEP / 2) * 3 + 1) * step_length * 0.01;
+                }
+                break;
         }
     }
 
 
-    private void countStep() {
-        total_step = StepAccel.CURRENT_STEP;
+    private void countStep(int sensor) {
+
+        switch (sensor)
+        {
+            case R.string.sensor_accelarometer:
+                total_step_accel = StepAccel.CURRENT_STEP;
+                break;
+            case R.string.sensor_step_detector:
+                total_step_detector = StepAccel.CURRENT_STEP;
+                break;
+            case R.string.sensor_step_counter:
+                total_step_counter = StepAccel.CURRENT_STEP;
+                break;
+        }
     }
 
     private String formatDouble(Double doubles) {

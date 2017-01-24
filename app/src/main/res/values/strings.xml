@@ -118,7 +118,9 @@
     <string name="double_zero">0.0</string>
     <string name="calories_zero">0.0</string>
     <string name="velocity_zero">0.0</string>
-    <string name="sensoring">Accelerometer</string>
+    <string name="sensor_accelarometer">Accelerometer</string>
+    <string name="sensor_step_detector">Step Detector</string>
+    <string name="sensor_step_counter">Step Counter</string>
 
 
     <!-- settings start -->
