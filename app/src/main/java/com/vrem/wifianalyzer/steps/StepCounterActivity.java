@@ -23,6 +23,5 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 
 
-@SuppressLint("HandlerLeak")
 public class StepCounterActivity extends Activity {
 }

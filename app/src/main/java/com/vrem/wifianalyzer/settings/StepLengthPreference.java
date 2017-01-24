@@ -46,9 +46,9 @@ public class StepLengthPreference extends DialogPreference {
         setPositiveButtonText(resources.getText(R.string.button_ok));
         setNegativeButtonText(resources.getText(R.string.button_cancel));
 
-        valueDefault = resources.getInteger(R.integer.scan_interval_default);
-        valueMin = resources.getInteger(R.integer.scan_interval_min);
-        valueMax = resources.getInteger(R.integer.scan_interval_max);
+        valueDefault = resources.getInteger(R.integer.step_length_default);
+        valueMin = resources.getInteger(R.integer.step_length_min);
+        valueMax = resources.getInteger(R.integer.step_length_max);
 
         summary = super.getSummary();
     }

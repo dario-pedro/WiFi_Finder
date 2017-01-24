@@ -4,10 +4,9 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.util.Log;
 
-public class StepDetector implements SensorEventListener {
+public class StepCounter implements SensorEventListener {
 
 	public static int CURRENT_SETP = 0;
 
@@ -18,7 +17,7 @@ public class StepDetector implements SensorEventListener {
 
 
 
-	public StepDetector(Context context) {
+	public StepCounter(Context context) {
 		// TODO Auto-generated constructor stub
 		super();
 
@@ -34,8 +33,8 @@ public class StepDetector implements SensorEventListener {
 
 		synchronized (this) {
 
-			if (type == Sensor.TYPE_STEP_DETECTOR) {
-				Log.i("SD","TODO handle TYPE_STEP_DETECTOR ");
+			if (type == Sensor.TYPE_STEP_COUNTER) {
+				Log.i("SD","TODO handle TYPE_STEP_COUNTER ");
 			}
 		}
 	}

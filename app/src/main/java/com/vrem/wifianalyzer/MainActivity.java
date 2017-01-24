@@ -18,10 +18,15 @@
 
 package com.vrem.wifianalyzer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -50,6 +55,8 @@ import com.vrem.wifianalyzer.wifi.band.WiFiChannel;
 import com.vrem.wifianalyzer.wifi.scanner.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 import static android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
 
@@ -95,7 +102,15 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
         connectionView = new ConnectionView(this);
         Scanner scanner = mainContext.getScanner();
         scanner.register(connectionView);
+
+        SensorManager mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+
+
+
     }
+
+
 
     ConnectionView getConnectionView() {
         return connectionView;
@@ -183,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
     }
 
     private boolean closeDrawer() {
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);

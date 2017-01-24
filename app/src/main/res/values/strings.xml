@@ -130,8 +130,8 @@
     <string name="step_length_title">Step Length</string>
     <string name="step_length_summary">%d cm step length</string>
     <string name="step_length_key" translatable="false">step_length</string>
-    <integer name="step_length_min" translatable="false">1</integer>
-    <integer name="step_length_max" translatable="false">120</integer>
+    <integer name="step_length_min" translatable="false">30</integer>
+    <integer name="step_length_max" translatable="false">125</integer>
     <integer name="step_length_default" translatable="false">78</integer>
 
     <string name="sort_by_title">Sort Access Points By</string>
