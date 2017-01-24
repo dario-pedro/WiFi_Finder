@@ -68,7 +68,7 @@
                 android:value="com.vrem.wifianalyzer.MainActivity" />
         </activity>
 
-
+        <service android:name=".steps.StepCounterService" />
 
 
         <meta-data

@@ -45,6 +45,8 @@ public class StepCounterActivity extends Activity {
     private TextView tv_velocity;
     private TextView tv_show_step;
 
+    private boolean mKeepRunning = false;
+
     Handler handler = new Handler() {
 
         @Override
@@ -83,13 +85,7 @@ public class StepCounterActivity extends Activity {
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.setContentView(R.layout.step_counter_activity);
 
-       /* if (SettingsActivity.sharedPreferences == null) {
-            SettingsActivity.sharedPreferences = this.getSharedPreferences(
-                    SettingsActivity.SETP_SHARED_PREFERENCES,
-                    Context.MODE_PRIVATE);
-        }
-
-*/
+        mKeepRunning = true;
 
         if (thread == null) {
 
@@ -100,7 +96,7 @@ public class StepCounterActivity extends Activity {
                     // TODO Auto-generated method stub
                     super.run();
                     int temp = 0;
-                    while (true) {
+                    while (mKeepRunning) {
                         try {
                             Thread.sleep(300);
                         } catch (InterruptedException e) {
@@ -109,8 +105,8 @@ public class StepCounterActivity extends Activity {
                         }
                         if (StepCounterService.FLAG) {
                             Message msg = new Message();
-                            if (temp != StepDetector.CURRENT_STEP) {
-                                temp = StepDetector.CURRENT_STEP;
+                            if (temp != StepAccel.CURRENT_STEP) {
+                                temp = StepAccel.CURRENT_STEP;
                             }
                             if (startTimer != System.currentTimeMillis()) {
                                 timer = tempTime + System.currentTimeMillis()
@@ -130,9 +126,6 @@ public class StepCounterActivity extends Activity {
     protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
-
-        Log.i("APP", "on resuame.");
-
         addView();
         init();
 
@@ -151,9 +144,11 @@ public class StepCounterActivity extends Activity {
 
 
         Intent service = new Intent(this, StepCounterService.class);
-        stopService(service);
+        startService(service);
+        // /stopService(service);
         StepDetector.CURRENT_STEP = 0;
-        tempTime = timer = 0;
+        startTimer = System.currentTimeMillis();
+        tempTime = timer;
         tv_show_step.setText("0");
         tv_distance.setText(formatDouble(0.0));
         tv_velocity.setText(formatDouble(0.0));
@@ -191,26 +186,21 @@ public class StepCounterActivity extends Activity {
     @Override
     protected void onDestroy() {
         // TODO Auto-generated method stub
+        mKeepRunning = false;
         super.onDestroy();
     }
 
     private void countDistance() {
         if (StepDetector.CURRENT_STEP % 2 == 0) {
-            distance = (StepDetector.CURRENT_STEP / 2) * 3 * step_length * 0.01;
+            distance = (StepAccel.CURRENT_STEP / 2) * 3 * step_length * 0.01;
         } else {
-            distance = ((StepDetector.CURRENT_STEP / 2) * 3 + 1) * step_length * 0.01;
+            distance = ((StepAccel.CURRENT_STEP / 2) * 3 + 1) * step_length * 0.01;
         }
     }
 
 
     private void countStep() {
-        if (StepDetector.CURRENT_STEP % 2 == 0) {
-            total_step = StepDetector.CURRENT_STEP;
-        } else {
-            total_step = StepDetector.CURRENT_STEP +1;
-        }
-
-        total_step = StepDetector.CURRENT_STEP;
+        total_step = StepAccel.CURRENT_STEP;
     }
 
     private String formatDouble(Double doubles) {

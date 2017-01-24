@@ -25,6 +25,8 @@ public class StepCounterService extends Service {
 	private WakeLock mWakeLock;
 
 
+
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
@@ -35,6 +37,7 @@ public class StepCounterService extends Service {
 		super.onCreate();
 
 		FLAG = true;
+
 
 		//generate sensors
 		accell = new StepAccel(this);
@@ -47,9 +50,9 @@ public class StepCounterService extends Service {
 
 		mSensorManager.registerListener(accell,
 				mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-				SensorManager.SENSOR_DELAY_FASTEST);
+				SensorManager.SENSOR_DELAY_NORMAL);
 
-		mSensorManager.registerListener(detector,
+	/*	mSensorManager.registerListener(detector,
 				mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR),
 				SensorManager.SENSOR_DELAY_NORMAL);
 
@@ -57,7 +60,7 @@ public class StepCounterService extends Service {
 				mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
 				SensorManager.SENSOR_DELAY_NORMAL);
 
-
+*/
 
 
 		// DONT CLOSE APP NOW

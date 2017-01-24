@@ -33,6 +33,7 @@ public class StepAccel implements SensorEventListener {
 		mYOffset = h * 0.5f;
 		mScale[0] = -(h * 0.5f * (1.0f / (SensorManager.STANDARD_GRAVITY * 2)));
 		mScale[1] = -(h * 0.5f * (1.0f / (SensorManager.MAGNETIC_FIELD_EARTH_MAX)));
+		SENSITIVITY = 3;
 		/*if (SettingsActivity.sharedPreferences == null) {
 			SettingsActivity.sharedPreferences = context.getSharedPreferences(
 					SettingsActivity.SETP_SHARED_PREFERENCES,
@@ -44,15 +45,13 @@ public class StepAccel implements SensorEventListener {
 
 
 
-	// public void onSensorChanged(int sensor, float[] values) {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-
-		int type = event.sensor.getType();
-
+		// Log.i(Constant.STEP_SERVER, "StepDetector");
+		Sensor sensor = event.sensor;
+		// Log.i(Constant.STEP_DETECTOR, "onSensorChanged");
 		synchronized (this) {
-
-			if (type == Sensor.TYPE_ACCELEROMETER) {
+			 if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 				float vSum = 0;
 				for (int i = 0; i < 3; i++) {
 					final float v = mYOffset + event.values[i] * mScale[1];
