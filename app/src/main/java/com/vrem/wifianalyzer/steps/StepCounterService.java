@@ -52,7 +52,7 @@ public class StepCounterService extends Service {
 				mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
 				SensorManager.SENSOR_DELAY_NORMAL);
 
-	/*	mSensorManager.registerListener(detector,
+		mSensorManager.registerListener(detector,
 				mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR),
 				SensorManager.SENSOR_DELAY_NORMAL);
 
@@ -60,7 +60,7 @@ public class StepCounterService extends Service {
 				mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
 				SensorManager.SENSOR_DELAY_NORMAL);
 
-*/
+
 
 
 		// DONT CLOSE APP NOW

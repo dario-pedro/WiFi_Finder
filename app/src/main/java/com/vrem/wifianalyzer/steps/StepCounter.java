@@ -10,17 +10,19 @@ public class StepCounter implements SensorEventListener {
 
 	public static int CURRENT_STEP = 0;
 
-	public static float SENSITIVITY = 3;
+	public static boolean first_time = true;
 
 	private static long end = 0;
-	private static long start = 0;
 
-
+	public static void reset_counter(){
+		end = CURRENT_STEP;
+		CURRENT_STEP =0;
+	}
 
 	public StepCounter(Context context) {
 		// TODO Auto-generated constructor stub
 		super();
-
+		first_time = true;
 	}
 
 
@@ -34,7 +36,12 @@ public class StepCounter implements SensorEventListener {
 		synchronized (this) {
 
 			if (type == Sensor.TYPE_STEP_COUNTER) {
-				Log.i("SD","TODO handle TYPE_STEP_COUNTER ");
+				if(first_time) {
+					end = (int) event.values[0];
+					first_time = false;
+				}
+
+				CURRENT_STEP = (int) (event.values[0] - end);
 			}
 		}
 	}

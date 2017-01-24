@@ -66,12 +66,33 @@ public class StepCounterActivity extends Activity {
                 velocity_accel = 0.0;
             }
 
+            if (timer != 0 && distance_detector != 0.0) {
+
+                velocity_detector = distance_detector * 1000 / timer;
+            } else {
+                velocity_detector = 0.0;
+            }
+
+            if (timer != 0 && distance_counter != 0.0) {
+
+                velocity_counter = distance_counter * 1000 / timer;
+            } else {
+                velocity_counter = 0.0;
+            }
+
             countStep();
 
             tv_show_step_accel.setText(total_step_accel + "");
-
             tv_distance_accel.setText(formatDouble(distance_accel));
             tv_velocity_accel.setText(formatDouble(velocity_accel));
+
+            tv_show_step_detector.setText(total_step_detector + "");
+            tv_distance_detector.setText(formatDouble(distance_detector));
+            tv_velocity_detector.setText(formatDouble(velocity_detector));
+
+            tv_show_step_counter.setText(total_step_counter + "");
+            tv_distance_counter.setText(formatDouble(distance_counter));
+            tv_velocity_counter.setText(formatDouble(velocity_counter));
 
         }
 
@@ -89,13 +110,12 @@ public class StepCounterActivity extends Activity {
 
         if (thread == null) {
 
-            thread = new Thread() {// ���߳����ڼ�����ǰ�����ı仯
+            thread = new Thread() {
 
                 @Override
                 public void run() {
                     // TODO Auto-generated method stub
                     super.run();
-                    int temp = 0;
                     while (mKeepRunning) {
                         try {
                             Thread.sleep(300);
@@ -104,20 +124,10 @@ public class StepCounterActivity extends Activity {
                             e.printStackTrace();
                         }
                         if (StepCounterService.FLAG) {
-                            Message msg = new Message();
-                            if (temp != StepAccel.CURRENT_STEP) {
-                                temp = StepAccel.CURRENT_STEP;
-                            }
-
-
-
                             if (startTimer != System.currentTimeMillis()) {
                                 timer = tempTime + System.currentTimeMillis()- startTimer;
                             }
-
-
-
-                            handler.sendMessage(msg);
+                            handler.sendMessage(new Message());
                         }
                     }
                 }
@@ -138,24 +148,48 @@ public class StepCounterActivity extends Activity {
 
 
     private void addView() {
+
+        //Init Graphical variables
         tv_show_step_accel = (TextView) this.findViewById(R.id.show_step);
-
-        tv_distance_accel = (TextView) this.findViewById(R.id.distance);
+        tv_distance_accel = (TextView) this.findViewById(R.id.distance_accel);
         tv_velocity_accel = (TextView) this.findViewById(R.id.velocity);
-
-
         step_counter_accel = (TextView)findViewById(R.id.step_counter);
 
+        tv_show_step_detector = (TextView) this.findViewById(R.id.show_step_detec);
+        tv_distance_detector = (TextView) this.findViewById(R.id.distance_detector);
+        tv_velocity_detector = (TextView) this.findViewById(R.id.velocity_detector);
+        step_counter_detector = (TextView)findViewById(R.id.step_counter_detec);
 
+        tv_show_step_counter = (TextView) this.findViewById(R.id.show_step_counter);
+        tv_distance_counter = (TextView) this.findViewById(R.id.distance_counter);
+        tv_velocity_counter = (TextView) this.findViewById(R.id.velocity_counter);
+        step_counter_counter = (TextView)findViewById(R.id.step_counter_counter);
+
+
+        //START SENSORS LISTENERS
         Intent service = new Intent(this, StepCounterService.class);
         startService(service);
-        // /stopService(service);
+        StepAccel.CURRENT_STEP = 0;
         StepDetector.CURRENT_STEP = 0;
+        StepCounter.reset_counter();
+
+
+
+        //RESET TIMERS
         startTimer = System.currentTimeMillis();
         tempTime = timer;
+
         tv_show_step_accel.setText("0");
         tv_distance_accel.setText(formatDouble(0.0));
         tv_velocity_accel.setText(formatDouble(0.0));
+
+        tv_show_step_detector.setText("0");
+        tv_distance_detector.setText(formatDouble(0.0));
+        tv_velocity_detector.setText(formatDouble(0.0));
+
+        tv_show_step_counter.setText("0");
+        tv_distance_counter.setText(formatDouble(0.0));
+        tv_velocity_counter.setText(formatDouble(0.0));
 
         handler.removeCallbacks(thread);
 
@@ -171,15 +205,24 @@ public class StepCounterActivity extends Activity {
 
         distance_accel = 0.0;
         total_step_accel = 0;
-
         velocity_accel = ((timer += tempTime) != 0 && distance_accel != 0.0) ? velocity_accel = distance_accel * 1000 / timer : 0.0;
-
-        //calories = weight * distance_accel * 0.001; : 0
-
         tv_distance_accel.setText(formatDouble(distance_accel));
         tv_velocity_accel.setText(formatDouble(velocity_accel));
-
         tv_show_step_accel.setText(total_step_accel + "");
+
+        distance_detector = 0.0;
+        total_step_detector = 0;
+        velocity_detector = ((timer += tempTime) != 0 && distance_detector != 0.0) ? velocity_detector = distance_detector * 1000 / timer : 0.0;
+        tv_distance_detector.setText(formatDouble(distance_detector));
+        tv_velocity_detector.setText(formatDouble(velocity_detector));
+        tv_show_step_detector.setText(total_step_detector + "");
+
+        distance_counter = 0.0;
+        total_step_counter = 0;
+        velocity_counter = ((timer += tempTime) != 0 && distance_counter != 0.0) ? velocity_counter = distance_counter * 1000 / timer : 0.0;
+        tv_distance_counter.setText(formatDouble(distance_counter));
+        tv_velocity_counter.setText(formatDouble(velocity_counter));
+        tv_show_step_counter.setText(total_step_counter + "");
 
     }
 
@@ -219,16 +262,16 @@ public class StepCounterActivity extends Activity {
                 break;
             case R.string.sensor_step_detector:
                 if (StepDetector.CURRENT_STEP % 2 == 0) {
-                    distance_accel = (StepAccel.CURRENT_STEP / 2) * 3 * step_length * 0.01;
+                    distance_detector = (StepDetector.CURRENT_STEP / 2) * 3 * step_length * 0.01;
                 } else {
-                    distance_accel = ((StepAccel.CURRENT_STEP / 2) * 3 + 1) * step_length * 0.01;
+                    distance_detector = ((StepDetector.CURRENT_STEP / 2) * 3 + 1) * step_length * 0.01;
                 }
                 break;
             case R.string.sensor_step_counter:
                 if (StepDetector.CURRENT_STEP % 2 == 0) {
-                    distance_accel = (StepAccel.CURRENT_STEP / 2) * 3 * step_length * 0.01;
+                    distance_counter = (StepCounter.CURRENT_STEP / 2) * 3 * step_length * 0.01;
                 } else {
-                    distance_accel = ((StepAccel.CURRENT_STEP / 2) * 3 + 1) * step_length * 0.01;
+                    distance_counter = ((StepCounter.CURRENT_STEP / 2) * 3 + 1) * step_length * 0.01;
                 }
                 break;
         }
@@ -243,10 +286,10 @@ public class StepCounterActivity extends Activity {
                 total_step_accel = StepAccel.CURRENT_STEP;
                 break;
             case R.string.sensor_step_detector:
-                total_step_detector = StepAccel.CURRENT_STEP;
+                total_step_detector = StepDetector.CURRENT_STEP;
                 break;
             case R.string.sensor_step_counter:
-                total_step_counter = StepAccel.CURRENT_STEP;
+                total_step_counter = StepCounter.CURRENT_STEP;
                 break;
         }
     }

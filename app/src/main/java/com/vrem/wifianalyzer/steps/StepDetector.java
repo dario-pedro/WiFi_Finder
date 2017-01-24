@@ -11,12 +11,6 @@ public class StepDetector implements SensorEventListener {
 
 	public static int CURRENT_STEP = 0;
 
-	public static float SENSITIVITY = 3;
-
-	private static long end = 0;
-	private static long start = 0;
-
-
 
 	public StepDetector(Context context) {
 		// TODO Auto-generated constructor stub
@@ -36,6 +30,7 @@ public class StepDetector implements SensorEventListener {
 
 			if (type == Sensor.TYPE_STEP_DETECTOR) {
 				Log.i("SD","TODO handle TYPE_STEP_DETECTOR ");
+				CURRENT_STEP++;
 			}
 		}
 	}
