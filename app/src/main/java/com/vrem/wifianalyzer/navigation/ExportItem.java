@@ -64,10 +64,11 @@ class ExportItem implements NavigationMenuItem {
 
     String getData(@NonNull List<WiFiDetail> wiFiDetails) {
         StringBuilder result = new StringBuilder();
+        result.append("WiFi Information:\n");
         result.append("SSID|BSSID|Strength|Primary Channel|Primary Frequency|Center Channel|Center Frequency|Width (Range)|Distance|Security\n");
         for (WiFiDetail wiFiDetail : wiFiDetails) {
             WiFiSignal wiFiSignal = wiFiDetail.getWiFiSignal();
-            result.append(String.format(Locale.ENGLISH, "%s|%s|%ddBm|%d|%d%s|%d|%d%s|%d%s (%d - %d)|%.1fm|%s\n",
+            result.append(String.format(Locale.ENGLISH, "%s|%s|%ddBm|%d|%d%s|%d|%d%s|%d%s (%d - %d)|%.1fm|%s\n\n",
                 wiFiDetail.getSSID(),
                 wiFiDetail.getBSSID(),
                 wiFiSignal.getLevel(),
@@ -84,6 +85,8 @@ class ExportItem implements NavigationMenuItem {
                 wiFiSignal.getDistance(),
                 wiFiDetail.getCapabilities()));
         }
+        result.append("Direction Information:\n");
+        result.append("TODO!!!!");
         return result.toString();
     }
 
