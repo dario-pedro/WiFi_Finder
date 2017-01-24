@@ -15,56 +15,32 @@ public class StepCounterService extends Service {
 	public static Boolean FLAG = false;
 
 	private SensorManager mSensorManager;
-	private StepAccel accell;//
-
-	private PowerManager mPowerManager;//
-	private WakeLock mWakeLock;//
-
-/*
-	Sensor mSensor_counter ;
-	Sensor mSensor_detect;
-
-	mSensor_counter = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-	mSensor_detect = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-
-	mSensorManager.registerListener(mSensorEventListenerCounter,
-	mSensor_counter, SensorManager.SENSOR_DELAY_NORMAL);
 
 
-	private SensorEventListener mSensorEventListenerCounter = new SensorEventListener() {
+	private StepAccel accell; // uses accelarometer
+	private StepDetector detector; // uses type_step_detector
+	private StepCounter counter; // uses type_step_counter
 
-		@Override
-		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		}
-
-		@Override
-		public void onSensorChanged(SensorEvent event) {
-			float value = event.values[0];
-		}
-	};
-
-*/
-
-
-
-
+	private PowerManager mPowerManager;
+	private WakeLock mWakeLock;
 
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
 		super.onCreate();
 
-		FLAG = true;//
+		FLAG = true;
 
-		//
+		//generate sensors
 		accell = new StepAccel(this);
+		detector = new StepDetector(this);
+		counter = new StepCounter(this);
+
 
 
 		mSensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
@@ -73,6 +49,18 @@ public class StepCounterService extends Service {
 				mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
 				SensorManager.SENSOR_DELAY_FASTEST);
 
+		mSensorManager.registerListener(detector,
+				mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR),
+				SensorManager.SENSOR_DELAY_NORMAL);
+
+		mSensorManager.registerListener(counter,
+				mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+				SensorManager.SENSOR_DELAY_NORMAL);
+
+
+
+
+		// DONT CLOSE APP NOW
 		mPowerManager = (PowerManager) this
 				.getSystemService(Context.POWER_SERVICE);
 		mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK
@@ -82,7 +70,6 @@ public class StepCounterService extends Service {
 
 	@Override
 	public void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		FLAG = false;
 		if (accell != null) {

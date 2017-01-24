@@ -49,7 +49,7 @@ public class StartMenuPreferenceTest {
     @Test
     public void testGetEntries() throws Exception {
         // setup
-        NavigationMenu[] expected = NavigationGroup.GROUP_FEATURE.navigationMenu();
+        NavigationMenu[] expected = NavigationGroup.GROUP_WIFI.navigationMenu();
         // execute
         CharSequence[] actual = fixture.getEntries();
         // validate
@@ -61,7 +61,7 @@ public class StartMenuPreferenceTest {
     @Test
     public void testGetEntryValues() throws Exception {
         // setup
-        NavigationMenu[] expected = NavigationGroup.GROUP_FEATURE.navigationMenu();
+        NavigationMenu[] expected = NavigationGroup.GROUP_WIFI.navigationMenu();
         // execute
         CharSequence[] actual = fixture.getEntryValues();
         // validate

@@ -22,9 +22,10 @@ import android.support.annotation.NonNull;
 
 public enum NavigationGroup {
     GROUP_TODO(NavigationMenu.LOGIN),
-    GROUP_FEATURE(NavigationMenu.ACCESS_POINTS,NavigationMenu.GOOGLE_MAPS,NavigationMenu.SENSOR_FUSION, NavigationMenu.CHANNEL_RATING, NavigationMenu.CHANNEL_GRAPH, NavigationMenu.TIME_GRAPH),
-    GROUP_OTHER(NavigationMenu.EXPORT, NavigationMenu.CHANNEL_AVAILABLE, NavigationMenu.VENDOR_LIST),
-    GROUP_SETTINGS(NavigationMenu.SETTINGS,NavigationMenu.ACCESS_POINTS.CONTACTS);
+    GROUP_WIFI(NavigationMenu.ACCESS_POINTS, NavigationMenu.CHANNEL_RATING, NavigationMenu.CHANNEL_GRAPH, NavigationMenu.TIME_GRAPH),
+    GROUP_ODOM(NavigationMenu.GOOGLE_MAPS,NavigationMenu.SENSOR_FUSION,NavigationMenu.STEP_COUNTER),
+    GROUP_OTHER(NavigationMenu.CHANNEL_AVAILABLE, NavigationMenu.VENDOR_LIST),
+    GROUP_SETTINGS(NavigationMenu.EXPORT,NavigationMenu.SETTINGS,NavigationMenu.ACCESS_POINTS.CONTACTS);
 
     private final NavigationMenu[] navigationMenu;
 

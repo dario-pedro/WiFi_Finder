@@ -59,6 +59,15 @@
                 android:value="com.vrem.wifianalyzer.MainActivity" />
         </activity>
 
+        <activity
+            android:name=".steps.StepCounterActivity"
+            android:label="@string/title_activity_sensor_selection"
+            android:screenOrientation="nosensor" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.vrem.wifianalyzer.MainActivity" />
+        </activity>
+
 
 
 

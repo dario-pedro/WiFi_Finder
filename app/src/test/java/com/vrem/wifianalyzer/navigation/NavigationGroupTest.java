@@ -33,7 +33,7 @@ public class NavigationGroupTest {
     @Test
     public void testNavigationGroupOrder() throws Exception {
         assertArrayEquals(new NavigationGroup[]{
-                NavigationGroup.GROUP_FEATURE,
+                NavigationGroup.GROUP_WIFI,
                 NavigationGroup.GROUP_OTHER,
                 NavigationGroup.GROUP_SETTINGS,
             },
@@ -48,7 +48,7 @@ public class NavigationGroupTest {
                 NavigationMenu.CHANNEL_GRAPH,
                 NavigationMenu.TIME_GRAPH
             },
-            NavigationGroup.GROUP_FEATURE.navigationMenu());
+            NavigationGroup.GROUP_WIFI.navigationMenu());
         assertArrayEquals(new NavigationMenu[]{
                 NavigationMenu.EXPORT,
                 NavigationMenu.CHANNEL_AVAILABLE,

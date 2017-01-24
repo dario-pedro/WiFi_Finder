@@ -11,6 +11,12 @@
         android:title="@string/step_length_title"/>
 
 
+    <com.vrem.wifianalyzer.settings.WeigthPreference
+        android:defaultValue="@integer/weight_default"
+        android:key="@string/weight_key"
+        android:persistent="true"
+        android:summary="@string/weight_summary"
+        android:title="@string/weight_title"/>
 
 
     <ListPreference

@@ -9,7 +9,7 @@ import android.util.Log;
 
 public class StepAccel implements SensorEventListener {
 
-	public static int CURRENT_SETP = 0;
+	public static int CURRENT_STEP = 0;
 
 	public static float SENSITIVITY = 0;
 
@@ -77,9 +77,9 @@ public class StepAccel implements SensorEventListener {
 						if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
 							end = System.currentTimeMillis();
 							if (end - start > 500) {
-								Log.i("StepAccel", "CURRENT_SETP:"
-										+ CURRENT_SETP);
-								CURRENT_SETP++;
+								Log.i("StepAccel", "CURRENT_STEP:"
+										+ CURRENT_STEP);
+								CURRENT_STEP++;
 								mLastMatch = extType;
 								start = end;
 							}

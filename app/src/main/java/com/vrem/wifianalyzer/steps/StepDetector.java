@@ -9,7 +9,7 @@ import android.util.Log;
 
 public class StepDetector implements SensorEventListener {
 
-	public static int CURRENT_SETP = 0;
+	public static int CURRENT_STEP = 0;
 
 	public static float SENSITIVITY = 3;
 
