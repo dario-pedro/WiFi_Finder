@@ -14,9 +14,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
+import java.text.DecimalFormat;
 import java.util.Locale;
 
 import com.vrem.wifianalyzer.R;
+import com.vrem.wifianalyzer.sensor_fusion.representation.EulerAngles;
 
 /**
  * The main activity where the user can select which sensor-fusion he wants to try out
@@ -39,15 +41,7 @@ public class SensorSelectionActivity extends FragmentActivity {
      */
     ViewPager mViewPager;
 
-    /**
-     *  For the UI Euler Angles updates
-     */
-    private Handler mHandler = new Handler();
 
-    /**
-     *   UI Euler Angles displays
-     */
-    private Button mButtonR,mButtonP,mButtonY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +62,11 @@ public class SensorSelectionActivity extends FragmentActivity {
         	// If a gyroscope is unavailable, display a warning.
         	displayHardwareMissingWarning();
         }
+
     }
+
+
+
 
     private void displayHardwareMissingWarning() {
     	AlertDialog ad = new AlertDialog.Builder(this).create();
@@ -96,6 +94,8 @@ public class SensorSelectionActivity extends FragmentActivity {
         // Handle item selection
         return true;
     }
+
+    Fragment curr_frag;
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -151,10 +151,6 @@ public class SensorSelectionActivity extends FragmentActivity {
         }
     }
 
-    private Runnable runnable = new Runnable() {
-        public void run() {
 
-        }
-    };
 
 }
