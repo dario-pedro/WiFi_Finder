@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import java.util.Locale;
 
@@ -36,6 +38,16 @@ public class SensorSelectionActivity extends FragmentActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+
+    /**
+     *  For the UI Euler Angles updates
+     */
+    private Handler mHandler = new Handler();
+
+    /**
+     *   UI Euler Angles displays
+     */
+    private Button mButtonR,mButtonP,mButtonY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,5 +150,11 @@ public class SensorSelectionActivity extends FragmentActivity {
             return null;
         }
     }
+
+    private Runnable runnable = new Runnable() {
+        public void run() {
+
+        }
+    };
 
 }

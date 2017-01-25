@@ -103,6 +103,13 @@
     <string name="gyroscope_missing">Gyroscope Missing</string>
     <string name="gyroscope_missing_message">Your device has no hardware gyroscope sensor, which would be necessary for this app to work properly. Please run it on a newer device that has a gyroscope.</string>
     <string name="OK">OK</string>
+    <string name="Roll">R</string>
+    <string name="Pitch">P</string>
+    <string name="Yaw">Y</string>
+
+
+
+
 
     <!-- step counte start -->
     <string name="step_number">Step count</string>
