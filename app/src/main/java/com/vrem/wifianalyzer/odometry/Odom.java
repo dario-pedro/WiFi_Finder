@@ -2,10 +2,14 @@ package com.vrem.wifianalyzer.odometry;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Message;
+
 
 import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
@@ -14,11 +18,7 @@ import com.vrem.wifianalyzer.sensor_fusion.SensorChecker;
 import com.vrem.wifianalyzer.sensor_fusion.SensorSelectionActivity;
 import com.vrem.wifianalyzer.sensor_fusion.orientationProvider.ImprovedOrientationSensor1Provider;
 import com.vrem.wifianalyzer.sensor_fusion.orientationProvider.OrientationProvider;
-import com.vrem.wifianalyzer.sensor_fusion.representation.EulerAngles;
-import com.vrem.wifianalyzer.steps.StepAccel;
-import com.vrem.wifianalyzer.steps.StepCounter;
-import com.vrem.wifianalyzer.steps.StepCounterService;
-import com.vrem.wifianalyzer.steps.StepDetector;
+
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -26,7 +26,7 @@ import static android.content.Context.SENSOR_SERVICE;
  * Created by Dário on 25/01/2017.
  */
 
-public class Odom extends Thread {
+public class Odom implements SensorEventListener  {
 
 
     /**
@@ -61,6 +61,40 @@ public class Odom extends Thread {
      */
     private double stepLength;
 
+
+    private SensorManager mSensorManager;
+
+    private float yaw = 0;
+
+
+
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+        int type = event.sensor.getType();
+
+        synchronized (this) {
+
+            if (type == Sensor.TYPE_STEP_DETECTOR) {
+                mSteps++;
+                yaw = currentOrientationProvider.getEulerAngles().getYaw();
+
+                float x = (float) (stepLength*Math.cos(yaw));
+                float y = (float) (stepLength*Math.sin(yaw));
+
+                mCoords.increment( x , y );
+
+            }
+        }
+    }
+
+
+
+
+
+
+
     public Odom() {
         super();
         init();
@@ -73,39 +107,9 @@ public class Odom extends Thread {
         mCoords = new Coordinates(x,y);
     }
 
-    @Override
-    public void run() {
-        // TODO Auto-generated method stub
-        super.run();
 
-        int steps_walked = 0;
-        float yaw = 0;
 
-        mKeepRunning = true;
-        while (mKeepRunning) {
-            try {
-                Thread.sleep(150);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            /**
-             * They are different when the user walks 1 step
-             */
-            if(mSteps != StepDetector.CURRENT_STEP)
-            {
-
-                steps_walked = StepDetector.CURRENT_STEP - mSteps;
-
-                mSteps = StepDetector.CURRENT_STEP;
-                yaw = currentOrientationProvider.getEulerAngles().getYaw();
-                mCoords.setX( (float) (steps_walked*stepLength*Math.cos(yaw)) );
-                mCoords.setY( (float) (steps_walked*stepLength*Math.sin(yaw)) );
-            }
-        }
-    }
-
-    public Coordinates getmCoords()
+    public Coordinates getCoords()
     {
         return mCoords;
     }
@@ -134,15 +138,18 @@ public class Odom extends Thread {
         /**
          * STEP COUNTER SERVICE
          */
+        mSensorManager = (SensorManager) activity.getSystemService(SENSOR_SERVICE);
+        mSensorManager.registerListener(this,mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR),
+                SensorManager.SENSOR_DELAY_FASTEST);
 
         stepLength =  MainContext.INSTANCE.getSettings().getStepLength();
-
-        StepCounterService.isALL = false;
         mSteps = 0;
-        Intent service = new Intent(activity, StepCounterService.class);
+        /*StepCounterService.isALL = false;
 
-        activity.startService(service);
-        StepCounter.reset_counter();
+        StepDetector.CURRENT_STEP=0;
+        Intent service = new Intent(activity, StepCounterService.class);
+        activity.startService(service);*/
+
 
     }
 
@@ -160,6 +167,19 @@ public class Odom extends Thread {
         ad.show();
     }
 
+    public void unregisterListener(){
+        mSensorManager.unregisterListener(this);
+    }
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Coordenates struct class
@@ -174,6 +194,12 @@ public class Odom extends Thread {
         public Coordinates(float x, float y) {
             this.x = x;
             this.y = y;
+        }
+
+        public void increment(float _x,float _y)
+        {
+            x+=_x;
+            y+=_y;
         }
 
         public float getX() {
@@ -194,6 +220,12 @@ public class Odom extends Thread {
 
         private float x;
         private float y;
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // TODO Auto-generated method stub
+
     }
 
 }

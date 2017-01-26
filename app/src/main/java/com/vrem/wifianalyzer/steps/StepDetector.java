@@ -13,14 +13,11 @@ public class StepDetector implements SensorEventListener {
 
 
 	public StepDetector(Context context) {
-		// TODO Auto-generated constructor stub
+
 		super();
 
 	}
 
-
-
-	// public void onSensorChanged(int sensor, float[] values) {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 
@@ -29,7 +26,6 @@ public class StepDetector implements SensorEventListener {
 		synchronized (this) {
 
 			if (type == Sensor.TYPE_STEP_DETECTOR) {
-				Log.i("SD","TODO handle TYPE_STEP_DETECTOR ");
 				CURRENT_STEP++;
 			}
 		}
@@ -37,7 +33,7 @@ public class StepDetector implements SensorEventListener {
 
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// TODO Auto-generated method stub
+
 	}
 
 }

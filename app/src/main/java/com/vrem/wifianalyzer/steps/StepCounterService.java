@@ -65,7 +65,7 @@ public class StepCounterService extends Service {
 
 		mSensorManager.registerListener(detector,
 				mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR),
-				SensorManager.SENSOR_DELAY_NORMAL);
+				SensorManager.SENSOR_DELAY_FASTEST);
 
 
 

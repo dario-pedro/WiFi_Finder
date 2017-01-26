@@ -2,6 +2,7 @@
 package com.vrem.wifianalyzer.odometry;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,11 +14,13 @@ import android.widget.TextView;
 
 import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
+import com.vrem.wifianalyzer.sensor_fusion.representation.EulerAngles;
 import com.vrem.wifianalyzer.settings.Settings;
 import com.vrem.wifianalyzer.wifi.model.WiFiData;
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail;
 import com.vrem.wifianalyzer.wifi.scanner.Scanner;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,11 @@ public class OdometryFragment extends Fragment {
     private List<WiFiDetail> wiFiDetails = new ArrayList<>();
 
     private Odom mOdom;
+
+    private Handler mHandler;
+
+    private boolean mKeepRunningUI;
+
 
     @Nullable
     @Override
@@ -51,12 +59,10 @@ public class OdometryFragment extends Fragment {
         tvX = (TextView) view.findViewById(R.id.textViewX_value);
         tvY = (TextView) view.findViewById(R.id.textViewY_value);
 
+        mOdom = new Odom();
 
-        if(mOdom==null) {
-            mOdom = new Odom();
-            mOdom.start();
-        }
-
+        mHandler = new Handler();
+        ui_update.start();
 
         refresh();
 
@@ -65,6 +71,30 @@ public class OdometryFragment extends Fragment {
 
         return view;
     }
+
+    private Thread ui_update = new Thread() {
+        public void run() {
+            mKeepRunningUI = true;
+            while (mKeepRunningUI) {
+                try {
+                    Thread.sleep(150);
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                mHandler.post(new Runnable(){
+                    public void run() {
+                        Odom.Coordinates c = mOdom.getCoords();
+
+                        tvX.setText(""+c.getX());
+                        tvY.setText(""+c.getY());
+                    }
+                });
+            }
+        }
+    };
+
 
     private void update(WiFiData wiFiData){
         Settings settings = MainContext.INSTANCE.getSettings();
@@ -76,10 +106,17 @@ public class OdometryFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(true);
         Scanner scanner = MainContext.INSTANCE.getScanner();
         scanner.update();
-        Odom.Coordinates coords = mOdom.getmCoords();
-        coords.setX(coords.getY());
         swipeRefreshLayout.setRefreshing(false);
     }
+
+
+    private String formatDouble(Double doubles) {
+        DecimalFormat format = new DecimalFormat("####.##");
+        String distanceStr = format.format(doubles);
+        return distanceStr.equals(getString(R.string.zero)) ? getString(R.string.double_zero)
+                : distanceStr;
+    }
+
 
     @Override
     public void onResume() {
@@ -94,4 +131,24 @@ public class OdometryFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDetach() {
+        //mOdom.unregisterListener();
+        ui_update = null;
+        super.onDetach();
+    }
+
+    @Override
+    public void onDestroyView() {
+        //mOdom.unregisterListener();
+        ui_update = null;
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        //mOdom.unregisterListener();
+        ui_update = null;
+        super.onDestroy();
+    }
 }
