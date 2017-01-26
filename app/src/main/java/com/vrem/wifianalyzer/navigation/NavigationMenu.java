@@ -10,6 +10,7 @@ import com.vrem.wifianalyzer.R;
 import com.vrem.wifianalyzer.contacts.ContactsFragment;
 //import com.vrem.wifianalyzer.maps.MapsActivity;
 import com.vrem.wifianalyzer.maps.MapsActivity;
+import com.vrem.wifianalyzer.odometry.OdometryFragment;
 import com.vrem.wifianalyzer.sensor_fusion.SensorSelectionActivity;
 import com.vrem.wifianalyzer.settings.SettingActivity;
 import com.vrem.wifianalyzer.steps.StepCounterActivity;
@@ -33,6 +34,7 @@ public enum NavigationMenu {
 
 
     GOOGLE_MAPS(R.drawable.ic_media_play, R.string.action_gmaps, new ActivityItem(MapsActivity.class)),
+    ODOMETRY(R.drawable.ic_transfer_within_a_station_black_24dp, R.string.action_odometry, new FragmentItem(new OdometryFragment())),
     SENSOR_FUSION(R.drawable.ic_developer_mode_black_24dp, R.string.action_sensorf, new ActivityItem(SensorSelectionActivity.class)),
     STEP_COUNTER(R.drawable.ic_directions_run_black_24dp, R.string.action_step_counter, new ActivityItem(StepCounterActivity.class)),
 

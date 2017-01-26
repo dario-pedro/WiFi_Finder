@@ -14,6 +14,8 @@ public class StepCounterService extends Service {
 
 	public static Boolean FLAG = false;
 
+	public static Boolean isALL = true;
+
 	private SensorManager mSensorManager;
 
 
@@ -47,18 +49,25 @@ public class StepCounterService extends Service {
 
 
 		mSensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
+		if(isALL)
+		{
 
-		mSensorManager.registerListener(accell,
-				mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-				SensorManager.SENSOR_DELAY_NORMAL);
+			mSensorManager.registerListener(accell,
+					mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+					SensorManager.SENSOR_DELAY_NORMAL);
+
+			mSensorManager.registerListener(counter,
+					mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+					SensorManager.SENSOR_DELAY_NORMAL);
+
+		}
+
 
 		mSensorManager.registerListener(detector,
 				mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR),
 				SensorManager.SENSOR_DELAY_NORMAL);
 
-		mSensorManager.registerListener(counter,
-				mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
-				SensorManager.SENSOR_DELAY_NORMAL);
+
 
 
 
@@ -71,12 +80,24 @@ public class StepCounterService extends Service {
 		mWakeLock.acquire();
 	}
 
+	public void leaveOnlyCounter()
+	{
+		mSensorManager.unregisterListener(accell);
+		mSensorManager.unregisterListener(detector);
+	}
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		FLAG = false;
 		if (accell != null) {
 			mSensorManager.unregisterListener(accell);
+		}
+		if (detector != null) {
+			mSensorManager.unregisterListener(detector);
+		}
+		if (counter != null) {
+			mSensorManager.unregisterListener(counter);
 		}
 
 		if (mWakeLock != null) {

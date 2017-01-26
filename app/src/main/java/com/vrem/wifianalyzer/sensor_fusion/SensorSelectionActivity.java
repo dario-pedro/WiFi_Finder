@@ -63,6 +63,8 @@ public class SensorSelectionActivity extends FragmentActivity {
         	displayHardwareMissingWarning();
         }
 
+
+
     }
 
 
@@ -94,8 +96,6 @@ public class SensorSelectionActivity extends FragmentActivity {
         // Handle item selection
         return true;
     }
-
-    Fragment curr_frag;
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

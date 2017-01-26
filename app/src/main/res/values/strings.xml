@@ -33,6 +33,7 @@
     <string name="action_gmaps">Localization</string>
     <string name="action_sensorf">Sensor Fusion</string>
     <string name="action_step_counter">Step Counter</string>
+    <string name="action_odometry">Odometry</string>
 
     <string name="button_ok" translatable="false">OK</string>
     <string name="button_cancel">Cancel</string>
@@ -106,6 +107,9 @@
     <string name="Roll">R</string>
     <string name="Pitch">P</string>
     <string name="Yaw">Y</string>
+
+    <string name="X">X</string>
+    <string name="Y">Y</string>
 
 
 

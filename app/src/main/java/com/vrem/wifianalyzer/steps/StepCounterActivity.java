@@ -108,6 +108,8 @@ public class StepCounterActivity extends Activity {
 
         mKeepRunning = true;
 
+        StepCounterService.isALL = true;
+
         if (thread == null) {
 
             thread = new Thread() {

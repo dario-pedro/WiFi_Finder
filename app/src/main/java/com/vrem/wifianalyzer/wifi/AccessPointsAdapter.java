@@ -19,6 +19,7 @@
 package com.vrem.wifianalyzer.wifi;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
