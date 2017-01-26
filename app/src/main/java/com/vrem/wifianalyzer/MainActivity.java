@@ -103,10 +103,6 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
         Scanner scanner = mainContext.getScanner();
         scanner.register(connectionView);
 
-        SensorManager mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-
-
-
 
     }
 
