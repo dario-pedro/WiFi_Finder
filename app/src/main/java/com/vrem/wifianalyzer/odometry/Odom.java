@@ -62,11 +62,13 @@ public class Odom extends Thread {
     private double stepLength;
 
     public Odom() {
+        super();
         init();
         mCoords = new Coordinates();
     }
 
     public Odom(float x,float y) {
+        super();
         init();
         mCoords = new Coordinates(x,y);
     }
@@ -75,6 +77,10 @@ public class Odom extends Thread {
     public void run() {
         // TODO Auto-generated method stub
         super.run();
+
+        int steps_walked = 0;
+        float yaw = 0;
+
         mKeepRunning = true;
         while (mKeepRunning) {
             try {
@@ -88,10 +94,13 @@ public class Odom extends Thread {
              */
             if(mSteps != StepDetector.CURRENT_STEP)
             {
+
+                steps_walked = StepDetector.CURRENT_STEP - mSteps;
+
                 mSteps = StepDetector.CURRENT_STEP;
-                float yaw = currentOrientationProvider.getEulerAngles().getYaw();
-                mCoords.setX( (float) (stepLength*Math.cos(yaw)) );
-                mCoords.setY( (float) (stepLength*Math.sin(yaw)) );
+                yaw = currentOrientationProvider.getEulerAngles().getYaw();
+                mCoords.setX( (float) (steps_walked*stepLength*Math.cos(yaw)) );
+                mCoords.setY( (float) (steps_walked*stepLength*Math.sin(yaw)) );
             }
         }
     }

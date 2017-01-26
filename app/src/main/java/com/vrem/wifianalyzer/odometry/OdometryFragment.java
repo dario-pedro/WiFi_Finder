@@ -31,6 +31,8 @@ public class OdometryFragment extends Fragment {
 
     private List<WiFiDetail> wiFiDetails = new ArrayList<>();
 
+    private Odom mOdom;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +51,13 @@ public class OdometryFragment extends Fragment {
         tvX = (TextView) view.findViewById(R.id.textViewX_value);
         tvY = (TextView) view.findViewById(R.id.textViewY_value);
 
+
+        if(mOdom==null) {
+            mOdom = new Odom();
+            mOdom.start();
+        }
+
+
         refresh();
 
         update(scanner.getWiFiData());
@@ -60,12 +69,15 @@ public class OdometryFragment extends Fragment {
     private void update(WiFiData wiFiData){
         Settings settings = MainContext.INSTANCE.getSettings();
         wiFiDetails = wiFiData.getWiFiDetails(settings.getWiFiBand(), settings.getSortBy(), settings.getGroupBy());
+
     }
 
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
         Scanner scanner = MainContext.INSTANCE.getScanner();
         scanner.update();
+        Odom.Coordinates coords = mOdom.getmCoords();
+        coords.setX(coords.getY());
         swipeRefreshLayout.setRefreshing(false);
     }
 
