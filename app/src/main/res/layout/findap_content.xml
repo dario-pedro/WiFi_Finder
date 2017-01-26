@@ -9,6 +9,12 @@
         android:layout_height="match_parent">
 
 
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/odomRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
 
         <LinearLayout
             android:orientation="horizontal"
@@ -89,6 +95,7 @@
                     android:gravity="center|top" />
             </LinearLayout>
         </LinearLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 
 </RelativeLayout>

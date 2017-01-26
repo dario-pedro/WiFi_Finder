@@ -34,6 +34,7 @@
     <string name="action_sensorf">Sensor Fusion</string>
     <string name="action_step_counter">Step Counter</string>
     <string name="action_odometry">Odometry</string>
+    <string name="action_findap">Find AP</string>
 
     <string name="button_ok" translatable="false">OK</string>
     <string name="button_cancel">Cancel</string>

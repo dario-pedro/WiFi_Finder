@@ -4,6 +4,7 @@ package com.vrem.wifianalyzer.navigation;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
 
+import com.vrem.wifianalyzer.localization.FindApFragment;
 import com.vrem.wifianalyzer.login.LoginActivity;
 import com.vrem.wifianalyzer.MainActivity;
 import com.vrem.wifianalyzer.R;
@@ -34,6 +35,7 @@ public enum NavigationMenu {
 
 
     GOOGLE_MAPS(R.drawable.ic_media_play, R.string.action_gmaps, new ActivityItem(MapsActivity.class)),
+    FIND_AP(R.drawable.ic_leak_add_black_24dp, R.string.action_findap, new FragmentItem(new FindApFragment())),
     ODOMETRY(R.drawable.ic_transfer_within_a_station_black_24dp, R.string.action_odometry, new FragmentItem(new OdometryFragment())),
     SENSOR_FUSION(R.drawable.ic_developer_mode_black_24dp, R.string.action_sensorf, new ActivityItem(SensorSelectionActivity.class)),
     STEP_COUNTER(R.drawable.ic_directions_run_black_24dp, R.string.action_step_counter, new ActivityItem(StepCounterActivity.class)),

@@ -6,33 +6,19 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
-import com.vrem.wifianalyzer.sensor_fusion.representation.EulerAngles;
-import com.vrem.wifianalyzer.settings.Settings;
-import com.vrem.wifianalyzer.wifi.model.WiFiData;
-import com.vrem.wifianalyzer.wifi.model.WiFiDetail;
-import com.vrem.wifianalyzer.wifi.scanner.Scanner;
-
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class OdometryFragment extends Fragment {
 
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private OdometryUpdates odometryUpdates;
 
     private TextView tvX;
     private TextView tvY;
-
-    private List<WiFiDetail> wiFiDetails = new ArrayList<>();
 
     private Odom mOdom;
 
@@ -44,17 +30,10 @@ public class OdometryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentActivity activity = getActivity();
+        //FragmentActivity activity = getActivity();
 
         View view = inflater.inflate(R.layout.odometry_content, container, false);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.odomRefresh);
-       // swipeRefreshLayout.setOnRefreshListener(new AccessPointsFragment.ListViewOnRefreshListener());
-
-        odometryUpdates = new OdometryUpdates();
-
-        Scanner scanner = MainContext.INSTANCE.getScanner();
-        //scanner.register(odometryUpdates);
 
         tvX = (TextView) view.findViewById(R.id.textViewX_value);
         tvY = (TextView) view.findViewById(R.id.textViewY_value);
@@ -64,9 +43,6 @@ public class OdometryFragment extends Fragment {
         mHandler = new Handler();
         ui_update.start();
 
-        refresh();
-
-        update(scanner.getWiFiData());
 
 
         return view;
@@ -85,10 +61,10 @@ public class OdometryFragment extends Fragment {
 
                 mHandler.post(new Runnable(){
                     public void run() {
-                        Odom.Coordinates c = mOdom.getCoords();
+                        Coordinates c = mOdom.getCoords();
 
-                        tvX.setText(""+c.getX());
-                        tvY.setText(""+c.getY());
+                        tvX.setText(""+formatDouble(c.getX()));
+                        tvY.setText(""+formatDouble(c.getY()));
                     }
                 });
             }
@@ -96,59 +72,49 @@ public class OdometryFragment extends Fragment {
     };
 
 
-    private void update(WiFiData wiFiData){
-        Settings settings = MainContext.INSTANCE.getSettings();
-        wiFiDetails = wiFiData.getWiFiDetails(settings.getWiFiBand(), settings.getSortBy(), settings.getGroupBy());
+    /**
+     * Converts cm to m
+     * @param value
+     * @return the value in m with the format "xxxx.xx m"
+     */
+    private String formatDouble(float value) {
 
-    }
+        value/=100;
 
-    private void refresh() {
-        swipeRefreshLayout.setRefreshing(true);
-        Scanner scanner = MainContext.INSTANCE.getScanner();
-        scanner.update();
-        swipeRefreshLayout.setRefreshing(false);
-    }
-
-
-    private String formatDouble(Double doubles) {
         DecimalFormat format = new DecimalFormat("####.##");
-        String distanceStr = format.format(doubles);
-        return distanceStr.equals(getString(R.string.zero)) ? getString(R.string.double_zero)
+        String distanceStr = format.format(value);
+
+        String result = distanceStr.equals(getString(R.string.zero)) ? getString(R.string.double_zero)
                 : distanceStr;
+
+        result+=" m";
+
+        return result;
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-        refresh();
-    }
-
-    private class ListViewOnRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
-        @Override
-        public void onRefresh() {
-            refresh();
-        }
+        if(!mKeepRunningUI)
+            ui_update.start();
     }
 
     @Override
     public void onDetach() {
-        //mOdom.unregisterListener();
-        ui_update = null;
+        mKeepRunningUI = false;
         super.onDetach();
     }
 
     @Override
     public void onDestroyView() {
-        //mOdom.unregisterListener();
-        ui_update = null;
+        mKeepRunningUI = false;
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        //mOdom.unregisterListener();
-        ui_update = null;
+        mKeepRunningUI = false;
         super.onDestroy();
     }
 }
