@@ -50,12 +50,12 @@ public class FindApFragment extends Fragment {
         View view = inflater.inflate(R.layout.findap_content, container, false);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.odomRefresh);
-       // swipeRefreshLayout.setOnRefreshListener(new AccessPointsFragment.ListViewOnRefreshListener());
+        swipeRefreshLayout.setOnRefreshListener(new ListViewOnRefreshListener());
 
         positionUpdates = new PositionUpdates();
 
         Scanner scanner = MainContext.INSTANCE.getScanner();
-        //scanner.register(odometryUpdates);
+        scanner.register(positionUpdates);
 
         tvX = (TextView) view.findViewById(R.id.textViewX_value);
         tvY = (TextView) view.findViewById(R.id.textViewY_value);
@@ -63,7 +63,7 @@ public class FindApFragment extends Fragment {
         mOdom = new Odom();
 
         mHandler = new Handler();
-        ui_update.start();
+        //ui_update.start();
 
         refresh();
 
@@ -73,7 +73,7 @@ public class FindApFragment extends Fragment {
         return view;
     }
 
-    private Thread ui_update = new Thread() {
+  /*  private Thread ui_update = new Thread() {
         public void run() {
             mKeepRunningUI = true;
             while (mKeepRunningUI) {
@@ -94,7 +94,7 @@ public class FindApFragment extends Fragment {
                 });
             }
         }
-    };
+    };*/
 
 
     private void update(WiFiData wiFiData){
@@ -134,22 +134,19 @@ public class FindApFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        //mOdom.unregisterListener();
-        ui_update = null;
+       // ui_update = null;
         super.onDetach();
     }
 
     @Override
     public void onDestroyView() {
-        //mOdom.unregisterListener();
-        ui_update = null;
+        //ui_update = null;
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        //mOdom.unregisterListener();
-        ui_update = null;
+        //ui_update = null;
         super.onDestroy();
     }
 }
