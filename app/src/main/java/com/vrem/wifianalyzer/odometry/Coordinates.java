@@ -24,6 +24,16 @@ public class Coordinates {
             y+=_y;
         }
 
+        public boolean equals(Coordinates test)
+        {
+            return test.getX()==this.x && test.getY()==this.y;
+        }
+
+        public static boolean equals(Coordinates c1,Coordinates c2)
+        {
+            return c1.getX()==c2.getX() && c1.getY()==c2.getX();
+        }
+
         public float getX() {
             return x;
         }

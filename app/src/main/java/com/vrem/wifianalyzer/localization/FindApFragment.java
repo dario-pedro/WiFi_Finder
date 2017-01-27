@@ -1,6 +1,7 @@
 
 package com.vrem.wifianalyzer.localization;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vrem.wifianalyzer.MainContext;
@@ -20,18 +22,20 @@ import com.vrem.wifianalyzer.settings.Settings;
 import com.vrem.wifianalyzer.wifi.model.WiFiData;
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail;
 import com.vrem.wifianalyzer.wifi.scanner.Scanner;
+import com.vrem.wifianalyzer.wifi.scanner.UpdateNotifier;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FindApFragment extends Fragment {
+public class FindApFragment extends Fragment  implements UpdateNotifier {
 
     private SwipeRefreshLayout swipeRefreshLayout;
-    private PositionUpdates positionUpdates;
+    private PositionData positionData;
 
     private TextView tvX;
     private TextView tvY;
+    private ImageView arrowView;
 
     private List<WiFiDetail> wiFiDetails = new ArrayList<>();
 
@@ -52,10 +56,12 @@ public class FindApFragment extends Fragment {
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.odomRefresh);
         swipeRefreshLayout.setOnRefreshListener(new ListViewOnRefreshListener());
 
-        positionUpdates = new PositionUpdates();
+        positionData = new PositionData();
 
         Scanner scanner = MainContext.INSTANCE.getScanner();
-        scanner.register(positionUpdates);
+        scanner.register(this);
+
+        arrowView = (ImageView) view.findViewById(R.id.arrowView);
 
         tvX = (TextView) view.findViewById(R.id.textViewX_value);
         tvY = (TextView) view.findViewById(R.id.textViewY_value);
@@ -67,11 +73,13 @@ public class FindApFragment extends Fragment {
 
         refresh();
 
-        update(scanner.getWiFiData());
+        //update(scanner.getWiFiData());
 
 
         return view;
     }
+
+
 
   /*  private Thread ui_update = new Thread() {
         public void run() {
@@ -97,9 +105,17 @@ public class FindApFragment extends Fragment {
     };*/
 
 
-    private void update(WiFiData wiFiData){
+    int degree = 0;
+
+    public void update(WiFiData wiFiData){
         Settings settings = MainContext.INSTANCE.getSettings();
         wiFiDetails = wiFiData.getWiFiDetails(settings.getWiFiBand(), settings.getSortBy(), settings.getGroupBy());
+
+        positionData.addPoint(new PositionPoint(mOdom.getCoords(),wiFiDetails));
+
+        //TODO CHANGE THE ARROW MOVEMENT, ACCORDING TO ESTIMATIION
+        degree+=90;
+        arrowView.animate().rotation(degree).start();
 
     }
 
