@@ -129,7 +129,7 @@ public class PositionData {
                 /**
                  * REPLACE THE VALUE
                  */
-                highestValues[min_value_index] = p;
+                highestValues[min_value_index] = (PositionPoint) p.clone();
                 require_recalculate_estimation = positionEstimated;
                 break;
             }

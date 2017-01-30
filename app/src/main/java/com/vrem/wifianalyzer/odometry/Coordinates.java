@@ -18,6 +18,11 @@ public class Coordinates {
             this.y = y;
         }
 
+        public Coordinates(Coordinates c) {
+            this.x = c.getX();
+            this.y = c.getY();
+        }
+
         public void increment(float _x,float _y)
         {
             x+=_x;

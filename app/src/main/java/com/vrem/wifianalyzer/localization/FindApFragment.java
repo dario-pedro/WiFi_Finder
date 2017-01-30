@@ -27,6 +27,7 @@ import com.vrem.wifianalyzer.wifi.scanner.UpdateNotifier;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class FindApFragment extends Fragment  implements UpdateNotifier {
 
@@ -35,6 +36,8 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
     private TextView tvX;
     private TextView tvY;
+    private TextView tvEX;
+    private TextView tvEY;
     private ImageView arrowView;
 
     private List<WiFiDetail> wiFiDetails = new ArrayList<>();
@@ -65,6 +68,8 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
         tvX = (TextView) view.findViewById(R.id.textViewX_value);
         tvY = (TextView) view.findViewById(R.id.textViewY_value);
+        tvEX = (TextView) view.findViewById(R.id.textView_estX_value);
+        tvEY = (TextView) view.findViewById(R.id.textView_estY_value);
 
         mOdom = new Odom();
 
@@ -111,22 +116,50 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
         Settings settings = MainContext.INSTANCE.getSettings();
         wiFiDetails = wiFiData.getWiFiDetails(settings.getWiFiBand(), settings.getSortBy(), settings.getGroupBy());
 
-        positionData.addPoint(new PositionPoint(mOdom.getCoords(),wiFiDetails));
+        Coordinates curr_coords = new Coordinates(mOdom.getCoords());
+
+        positionData.addPoint(new PositionPoint(curr_coords,wiFiDetails));
 
         //TODO CHANGE THE ARROW MOVEMENT, ACCORDING TO ESTIMATIION
-        degree+=90;
+        int offset_deegree = (int) - Math.toDegrees(mOdom.getAngle());
+        arrowView.animate().rotation(degree).start();
+
+        final Coordinates current_coords = mOdom.getCoords();
+
+
+
+
+        if(positionData.positionEstimated)
+            degree = (int) -(getAngle(current_coords,positionData.getTargetPosition()) + offset_deegree);
+
         arrowView.animate().rotation(degree).start();
 
         mHandler.post(new Runnable(){
             public void run() {
-                Coordinates c = mOdom.getCoords();
+                if(positionData.positionEstimated) {
+                    tvEX.setText("" + formatDouble(positionData.getTargetPosition().getX()));
+                    tvEY.setText("" + formatDouble(positionData.getTargetPosition().getY()));
+                }
 
-                tvX.setText(""+formatDouble(c.getX()));
-                tvY.setText(""+formatDouble(c.getY()));
+                tvX.setText(""+formatDouble(current_coords.getX()));
+                tvY.setText(""+formatDouble(current_coords.getY()));
             }
         });
 
     }
+
+
+    public double getAngle(Coordinates current,Coordinates target) {
+        double angle = Math.toDegrees(Math.atan2(target.getY() - current.getY(),target.getX() - current.getX()));
+
+        if(angle < 0){
+            angle += 360;
+        }
+
+        return angle;
+    }
+
+
 
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
@@ -137,6 +170,7 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
 
     private String formatDouble(float val) {
+        val /= 100;
         DecimalFormat format = new DecimalFormat("####.##");
         String distanceStr = format.format(val);
         return distanceStr.equals(getString(R.string.zero)) ? getString(R.string.double_zero)

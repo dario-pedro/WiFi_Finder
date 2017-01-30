@@ -41,6 +41,29 @@ public class OdometryFragment extends Fragment {
         mOdom = new Odom();
 
         mHandler = new Handler();
+
+        ui_update  = new Thread() {
+            public void run() {
+                mKeepRunningUI = true;
+                while (mKeepRunningUI) {
+                    try {
+                        Thread.sleep(150);
+                    }
+                    catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    mHandler.post(new Runnable(){
+                        public void run() {
+                            Coordinates c = mOdom.getCoords();
+
+                            tvX.setText(""+formatDouble(c.getX()));
+                            tvY.setText(""+formatDouble(c.getY()));
+                        }
+                    });
+                }
+            }
+        };
         ui_update.start();
 
 
@@ -48,28 +71,7 @@ public class OdometryFragment extends Fragment {
         return view;
     }
 
-    private Thread ui_update = new Thread() {
-        public void run() {
-            mKeepRunningUI = true;
-            while (mKeepRunningUI) {
-                try {
-                    Thread.sleep(150);
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                mHandler.post(new Runnable(){
-                    public void run() {
-                        Coordinates c = mOdom.getCoords();
-
-                        tvX.setText(""+formatDouble(c.getX()));
-                        tvY.setText(""+formatDouble(c.getY()));
-                    }
-                });
-            }
-        }
-    };
+    private Thread ui_update ;
 
 
     /**
@@ -84,8 +86,11 @@ public class OdometryFragment extends Fragment {
         DecimalFormat format = new DecimalFormat("####.##");
         String distanceStr = format.format(value);
 
-        String result = distanceStr.equals(getString(R.string.zero)) ? getString(R.string.double_zero)
-                : distanceStr;
+        String result = ""+value;
+
+        if(mKeepRunningUI)
+            result = distanceStr.equals(getString(R.string.zero)) ? getString(R.string.double_zero)
+                    : distanceStr;
 
         result+=" m";
 
@@ -103,18 +108,21 @@ public class OdometryFragment extends Fragment {
     @Override
     public void onDetach() {
         mKeepRunningUI = false;
+        ui_update.interrupt();
         super.onDetach();
     }
 
     @Override
     public void onDestroyView() {
         mKeepRunningUI = false;
+        ui_update.interrupt();
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
         mKeepRunningUI = false;
+        ui_update.interrupt();
         super.onDestroy();
     }
 }

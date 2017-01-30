@@ -10,7 +10,9 @@ import java.util.List;
  * Created by Dário on 26/01/2017.
  */
 
-public class PositionPoint {
+public class PositionPoint implements Cloneable {
+
+
 
     private Coordinates position;
     private List<WiFiDetail> info;
@@ -27,6 +29,18 @@ public class PositionPoint {
             info.get(0).getWiFiSignal().getDistance()*m_to_cm : Double.MAX_VALUE;
 
 
+    }
+
+    public Object clone()
+    {
+        try
+        {
+            return super.clone();
+        }
+        catch( CloneNotSupportedException e )
+        {
+            return null;
+        }
     }
 
     public Coordinates getPosition() {
