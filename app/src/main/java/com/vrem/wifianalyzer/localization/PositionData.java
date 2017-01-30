@@ -4,6 +4,8 @@ import com.vrem.wifianalyzer.odometry.Coordinates;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import static com.vrem.wifianalyzer.localization.TrilaterationSolver.solve;
+
 /**
  * Created by Dário on 26/01/2017.
  */
@@ -55,34 +57,29 @@ public class PositionData {
             positionEstimated = true;
         }
 
+        boolean require_recalculate_estimation = false;
 
-        for(int i = highestValues.length -1 ; i >= 0 ; i--)
+
+        if(replace_coordinates(p))
         {
-            /**
-             * CHECK IF THE NEW VALUE IS BIGGER THEN ANY IN THE STORE MAX VALUES
-             */
-            if(highestValues[i].getLevel() < p.getLevel())
-            {
-                PositionPoint min_value = highestValues[i];
-                int min_value_index = i;
+            require_recalculate_estimation = positionEstimated;
+        }
+        else{
+            require_recalculate_estimation = addNewPoint(positionEstimated,p);
+        }
 
-                /**
-                 * GET THE MINIMUM VALUE IN THE MAX VALUES STORED
-                 */
-                int j = i;
-                for(; j >= 0 ; j--)
-                {
-                    if(highestValues[j].getLevel() < min_value.getLevel()) {
-                        min_value = highestValues[j];
-                        min_value_index = j;
-                    }
-                }
-                /**
-                 * REPLACE THE VALUE
-                 */
-                highestValues[min_value_index] = p;
-                break;
-            }
+
+
+        if(require_recalculate_estimation)
+        {
+
+
+           estimatedTargetPosition = solve(highestValues[0].getPosition(),
+                                            highestValues[1].getPosition(),
+                                            highestValues[2].getPosition(),
+                                            highestValues[0].getDistance(),
+                                            highestValues[1].getDistance(),
+                                            highestValues[2].getDistance());
         }
 
 
@@ -90,7 +87,6 @@ public class PositionData {
 
     public Coordinates getTargetPosition()
     {
-
         return estimatedTargetPosition;
     }
 
@@ -106,6 +102,81 @@ public class PositionData {
 
     }
 
+
+    private boolean  addNewPoint(boolean positionEstimated, PositionPoint p){
+        boolean require_recalculate_estimation = false;
+        for(int i = highestValues.length -1 ; i >= 0 ; i--)
+        {
+            /**
+             * CHECK IF THE NEW VALUE IS BIGGER THEN ANY IN THE STORE MAX VALUES
+             */
+            if(highestValues[i].getDistance() > p.getDistance())
+            {
+                PositionPoint min_value = highestValues[i];
+                int min_value_index = i;
+
+                /**
+                 * GET THE MINIMUM VALUE IN THE MAX VALUES STORED
+                 */
+                int j = i;
+                for(; j >= 0 ; j--)
+                {
+                    if(highestValues[j].getDistance() > min_value.getDistance()) {
+                        min_value = highestValues[j];
+                        min_value_index = j;
+                    }
+                }
+                /**
+                 * REPLACE THE VALUE
+                 */
+                highestValues[min_value_index] = p;
+                require_recalculate_estimation = positionEstimated;
+                break;
+            }
+        }
+
+        return require_recalculate_estimation;
+    }
+
+    private boolean containes_coordinates(PositionPoint[] points, PositionPoint p)
+    {
+        if(points==null || points.length==0)
+            return false;
+
+        for(int i = points.length -1; i > 0 ;i-- )
+        {
+            if(Coordinates.equals(points[i].getPosition(),p.getPosition()))
+                return true;
+        }
+
+        return false;
+
+
+    }
+
+
+    private boolean replace_coordinates(PositionPoint p)
+    {
+        if(points==null || highestValues.length==0)
+            return false;
+
+        for(int i = highestValues.length -1; i > 0 ;i-- )
+        {
+            if(Coordinates.equals(highestValues[i].getPosition(),p.getPosition()))
+            {
+                if(highestValues[i].getDistance()>= p.getDistance())
+                    highestValues[i] = p ; // replace by the point with shorter distance
+
+
+                return true;
+            }
+
+        }
+
+        return false;
+
+
+    }
 
 
 

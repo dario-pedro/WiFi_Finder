@@ -117,6 +117,15 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
         degree+=90;
         arrowView.animate().rotation(degree).start();
 
+        mHandler.post(new Runnable(){
+            public void run() {
+                Coordinates c = mOdom.getCoords();
+
+                tvX.setText(""+formatDouble(c.getX()));
+                tvY.setText(""+formatDouble(c.getY()));
+            }
+        });
+
     }
 
     private void refresh() {
@@ -127,9 +136,9 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
     }
 
 
-    private String formatDouble(Double doubles) {
+    private String formatDouble(float val) {
         DecimalFormat format = new DecimalFormat("####.##");
-        String distanceStr = format.format(doubles);
+        String distanceStr = format.format(val);
         return distanceStr.equals(getString(R.string.zero)) ? getString(R.string.double_zero)
                 : distanceStr;
     }

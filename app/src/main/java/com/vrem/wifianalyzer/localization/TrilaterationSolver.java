@@ -33,8 +33,19 @@ public class TrilaterationSolver {
 
         double S = (Math.pow(xc, 2.) - Math.pow(xb, 2.) + Math.pow(yc, 2.) - Math.pow(yb, 2.) + Math.pow(rb, 2.) - Math.pow(rc, 2.)) / 2.0;
         double T = (Math.pow(xa, 2.) - Math.pow(xb, 2.) + Math.pow(ya, 2.) - Math.pow(yb, 2.) + Math.pow(rb, 2.) - Math.pow(ra, 2.)) / 2.0;
-        double y = ((T * (xb - xc)) - (S * (xb - xa))) / (((ya - yb) * (xb - xc)) - ((yc - yb) * (xb - xa)));
-        double x = ((y * (ya - yb)) - T) / (xb - xa);
+
+        double topY = (T * (xb - xc)) - (S * (xb - xa));
+        double botY = ((ya - yb) * (xb - xc)) - ((yc - yb) * (xb - xa));
+
+
+        double y = (botY == 0) ?
+                 (botY == topY) ? 1 : (botY == -topY) ? -1: topY/botY : topY / botY;
+
+        double topX = (y * (ya - yb)) - T;
+        double botX = xb - xa;
+
+        double x = (botX == 0) ?
+         (botX == topX) ? 1 : (botX == -topX) ? -1 : topX/botX : topX / botX;
 
         return new Coordinates((float)x,(float)y);
     }

@@ -46,6 +46,7 @@ import android.view.View.OnClickListener;
 
 import com.vrem.wifianalyzer.navigation.NavigationMenu;
 import com.vrem.wifianalyzer.navigation.NavigationMenuView;
+import com.vrem.wifianalyzer.odometry.Coordinates;
 import com.vrem.wifianalyzer.settings.Settings;
 import com.vrem.wifianalyzer.settings.ThemeStyle;
 import com.vrem.wifianalyzer.wifi.AccessPointView;
@@ -59,6 +60,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
 import static android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
+import static com.vrem.wifianalyzer.localization.TrilaterationSolver.solve;
 
 public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener, OnNavigationItemSelectedListener {
     private ThemeStyle currentThemeStyle;
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
     protected void onCreate(Bundle savedInstanceState) {
         MainContext mainContext = MainContext.INSTANCE;
         mainContext.initialize(this, isLargeScreenLayout());
+
 
         Settings settings = mainContext.getSettings();
         settings.initializeDefaultValues();

@@ -201,6 +201,7 @@
     <string name="theme_default" translatable="false">0</string>
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_maps">Maps</string>
+    <string name="notfound">N/A</string>
 
 
     <!-- settings end -->

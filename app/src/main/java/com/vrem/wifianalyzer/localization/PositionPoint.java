@@ -15,14 +15,18 @@ public class PositionPoint {
     private Coordinates position;
     private List<WiFiDetail> info;
 
-    private int level;
+    private static final double m_to_cm = 100.0;
+
+    private double distance;
 
     public PositionPoint(Coordinates position, List<WiFiDetail> info) {
         this.position = position;
         this.info = info;
 
-        this.level = (info != null && info.size() > -1) ?
-            info.get(0).getWiFiSignal().getLevel() : Integer.MIN_VALUE;
+        this.distance = (info != null && info.size() > -1) ?
+            info.get(0).getWiFiSignal().getDistance()*m_to_cm : Double.MAX_VALUE;
+
+
     }
 
     public Coordinates getPosition() {
@@ -41,11 +45,11 @@ public class PositionPoint {
         this.info = info;
     }
 
-    public int getLevel() {
-        return level;
+    public double getDistance() {
+        return distance;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 }
