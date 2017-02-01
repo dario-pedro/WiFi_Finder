@@ -19,6 +19,7 @@ import com.vrem.wifianalyzer.sensor_fusion.SensorChecker;
 import com.vrem.wifianalyzer.sensor_fusion.SensorSelectionActivity;
 import com.vrem.wifianalyzer.sensor_fusion.orientationProvider.ImprovedOrientationSensor1Provider;
 import com.vrem.wifianalyzer.sensor_fusion.orientationProvider.OrientationProvider;
+import com.vrem.wifianalyzer.steps.StepAccel;
 
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -28,6 +29,7 @@ import static android.content.Context.SENSOR_SERVICE;
  */
 
 public class Odom implements SensorEventListener  {
+
 
 
     /**

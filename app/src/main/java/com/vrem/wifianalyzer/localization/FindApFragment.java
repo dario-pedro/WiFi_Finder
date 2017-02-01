@@ -89,6 +89,7 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
   /*  private Thread ui_update = new Thread() {
         public void run() {
             mKeepRunningUI = true;
+
             while (mKeepRunningUI) {
                 try {
                     Thread.sleep(150);
@@ -150,6 +151,7 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
 
     public double getAngle(Coordinates current,Coordinates target) {
+
         double angle = Math.toDegrees(Math.atan2(target.getY() - current.getY(),target.getX() - current.getX()));
 
         if(angle < 0){
