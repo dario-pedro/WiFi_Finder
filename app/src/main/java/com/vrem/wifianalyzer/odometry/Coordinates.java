@@ -55,6 +55,39 @@ public class Coordinates {
             this.y = y;
         }
 
+
+        public static float distance_betweent(Coordinates a, Coordinates b)
+        {
+            float x_diff = a.getX() - b.getX();
+            float y_diff = a.getY() - b.getY();
+
+            return (float) Math.sqrt(x_diff*x_diff + y_diff*y_diff);
+        }
+
+        public float distance_betweent(Coordinates b)
+        {
+            float x_diff = x - b.getX();
+            float y_diff = y - b.getY();
+
+            return (float) Math.sqrt(x_diff*x_diff + y_diff*y_diff);
+        }
+
+        public static float distance_betweent_simp(Coordinates a, Coordinates b)
+        {
+            float x_diff = a.getX() - b.getX();
+            float y_diff = a.getY() - b.getY();
+
+            return (float) x_diff + y_diff;
+        }
+
+        public float distance_betweent_simp(Coordinates b)
+        {
+            float x_diff = x - b.getX();
+            float y_diff = y - b.getY();
+
+            return (float) x_diff + y_diff;
+        }
+
         private float x;
         private float y;
     }

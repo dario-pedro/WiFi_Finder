@@ -75,8 +75,6 @@ public class PositionData {
 
         if(require_recalculate_estimation)
         {
-
-
            estimatedTargetPosition = solve(highestValues[0].getPosition(),
                                             highestValues[1].getPosition(),
                                             highestValues[2].getPosition(),
@@ -113,6 +111,7 @@ public class PositionData {
 
     private boolean  addNewPoint(boolean positionEstimated, PositionPoint p){
         boolean require_recalculate_estimation = false;
+
         for(int i = highestValues.length -1 ; i >= 0 ; i--)
         {
             /**
@@ -163,6 +162,12 @@ public class PositionData {
     }
 
 
+    /**
+     *
+     * Replaces the point with the same coordinates if the given point is closer
+     * @param p - PositionPoint to be tested
+     * @return true if sucessfly replaced
+     */
     private boolean replace_coordinates(PositionPoint p)
     {
         if(points==null || highestValues.length==0)
@@ -172,11 +177,12 @@ public class PositionData {
         {
             if(Coordinates.equals(highestValues[i].getPosition(),p.getPosition()))
             {
-                if(highestValues[i].getDistance()>= p.getDistance())
-                    highestValues[i] = p ; // replace by the point with shorter distance
+                if(highestValues[i].getDistance()>= p.getDistance()) {
+                    highestValues[i] = p; // replace by the point with shorter distance
+                    return true;
+                }
+                return false;
 
-
-                return true;
             }
 
         }

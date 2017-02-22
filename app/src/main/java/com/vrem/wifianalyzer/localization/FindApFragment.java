@@ -75,13 +75,13 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
         mHandler = new Handler();
 
-
+/*
         Coordinates a = new Coordinates(0.5f,0.5f);
         Coordinates b = new Coordinates(0.5f,-0.2f);
         Coordinates c = new Coordinates(-0.3f,-0.2f);
         Coordinates d = new Coordinates(-0.3f,0.5f);
 
-        /*double test_angle = getAngle(a,b);
+        double test_angle = getAngle(a,b);
         test_angle=0;
         test_angle = getAngle(a,b);
         test_angle=0;
@@ -101,7 +101,7 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
         test_angle = getAngle(d,b);
         test_angle=0;*/
 
-        refresh();
+        //refresh();
 
         return view;
     }
