@@ -4,6 +4,7 @@ import com.vrem.wifianalyzer.odometry.Coordinates;
 import com.vrem.wifianalyzer.wifi.model.WiFiData;
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,9 +22,13 @@ public class PositionPoint implements Cloneable {
 
     private double distance;
 
+    Date store_time;
+
     public PositionPoint(Coordinates position, List<WiFiDetail> info) {
         this.position = position;
         this.info = info;
+
+        this.store_time = new Date();
 
         this.distance = (info != null && info.size() > -1) ?
             info.get(0).getWiFiSignal().getDistance()*m_to_cm : Double.MAX_VALUE;

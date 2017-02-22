@@ -74,44 +74,42 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
         mOdom = new Odom();
 
         mHandler = new Handler();
-        //ui_update.start();
+
+
+        Coordinates a = new Coordinates(0.5f,0.5f);
+        Coordinates b = new Coordinates(0.5f,-0.2f);
+        Coordinates c = new Coordinates(-0.3f,-0.2f);
+        Coordinates d = new Coordinates(-0.3f,0.5f);
+
+        double test_angle = getAngle(a,b);
+        test_angle=0;
+        test_angle = getAngle(a,b);
+        test_angle=0;
+        test_angle = getAngle(a,c);
+        test_angle=0;
+        test_angle = getAngle(a,d);
+        /*test_angle=0;
+        test_angle = getAngle(c,a);
+        test_angle=0;
+        test_angle = getAngle(c,b);
+        test_angle=0;
+        test_angle = getAngle(a,d);
+        test_angle=0;
+        test_angle = getAngle(b,d);
+        test_angle=0;
+
+        test_angle = getAngle(d,b);
+        test_angle=0;*/
 
         refresh();
-
-        //update(scanner.getWiFiData());
-
 
         return view;
     }
 
 
 
-  /*  private Thread ui_update = new Thread() {
-        public void run() {
-            mKeepRunningUI = true;
 
-            while (mKeepRunningUI) {
-                try {
-                    Thread.sleep(150);
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                mHandler.post(new Runnable(){
-                    public void run() {
-                        Coordinates c = mOdom.getCoords();
-
-                        tvX.setText(""+c.getX());
-                        tvY.setText(""+c.getY());
-                    }
-                });
-            }
-        }
-    };*/
-
-
-    int degree = 0;
+    private int degree = 0;
 
     public void update(WiFiData wiFiData){
         Settings settings = MainContext.INSTANCE.getSettings();
@@ -123,7 +121,7 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
         //TODO CHANGE THE ARROW MOVEMENT, ACCORDING TO ESTIMATIION
         int offset_deegree = (int) - Math.toDegrees(mOdom.getAngle());
-        arrowView.animate().rotation(degree).start();
+        arrowView.animate().rotation(offset_deegree).start();
 
         final Coordinates current_coords = mOdom.getCoords();
 
@@ -133,7 +131,7 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
         if(positionData.positionEstimated)
             degree = (int) -(getAngle(current_coords,positionData.getTargetPosition()) + offset_deegree);
 
-        arrowView.animate().rotation(degree).start();
+        //arrowView.animate().rotation(degree).start();
 
         mHandler.post(new Runnable(){
             public void run() {

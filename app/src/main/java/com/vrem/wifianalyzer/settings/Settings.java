@@ -62,6 +62,10 @@ public class Settings {
         return repository.getInteger(R.string.weight_key,R.integer.weight_default);
     }
 
+    public int getShowAll(){
+        return repository.getInteger(R.string.weight_key,R.integer.weight_default);
+    }
+
 
 
     public int getScanInterval() {

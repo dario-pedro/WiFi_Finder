@@ -49,6 +49,11 @@
         <item>Compact</item>
     </string-array>
 
+    <string-array name="show_all_array">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
     <string-array name="graph_legend_index_array" translatable="false">
         <item>0</item>
         <item>1</item>

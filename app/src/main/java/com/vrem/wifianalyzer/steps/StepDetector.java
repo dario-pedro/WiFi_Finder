@@ -7,12 +7,15 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import com.vrem.wifianalyzer.odometry.OdomInterface;
+
 public class StepDetector implements SensorEventListener {
 
 	public static int CURRENT_STEP = 0;
 
+	private OdomInterface stepEvent;
 
-	public StepDetector(Context context) {
+	public StepDetector() {
 
 		super();
 
@@ -27,6 +30,8 @@ public class StepDetector implements SensorEventListener {
 
 			if (type == Sensor.TYPE_STEP_DETECTOR) {
 				CURRENT_STEP++;
+				if(stepEvent!=null)
+					stepEvent.update(CURRENT_STEP);
 			}
 		}
 	}

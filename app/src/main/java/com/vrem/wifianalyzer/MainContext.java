@@ -23,10 +23,15 @@ import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 
+import com.vrem.wifianalyzer.localization.PositionPoint;
+import com.vrem.wifianalyzer.odometry.Coordinates;
 import com.vrem.wifianalyzer.settings.Settings;
 import com.vrem.wifianalyzer.vendor.model.Database;
 import com.vrem.wifianalyzer.vendor.model.VendorService;
 import com.vrem.wifianalyzer.wifi.scanner.Scanner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public enum MainContext {
     INSTANCE;
@@ -37,6 +42,20 @@ public enum MainContext {
     private VendorService vendorService;
     private Database database;
     private Configuration configuration;
+    private List<PositionPoint> mEstimativesList;
+
+    public List<PositionPoint> getmEstimativesList() {
+        return mEstimativesList;
+    }
+
+    public void setmEstimativesList(List<PositionPoint> mEstimativesList) {
+        this.mEstimativesList = mEstimativesList;
+    }
+
+    public void addEstimative(PositionPoint positionPoint)
+    {
+        mEstimativesList.add(positionPoint);
+    }
 
     public Settings getSettings() {
         return settings;
@@ -91,6 +110,8 @@ public enum MainContext {
         Handler handler = new Handler();
         Settings settings = new Settings(mainActivity);
         Configuration configuration = new Configuration(isLargeScreenLayout);
+
+        mEstimativesList = new ArrayList<PositionPoint>();
 
         setMainActivity(mainActivity);
         setConfiguration(configuration);

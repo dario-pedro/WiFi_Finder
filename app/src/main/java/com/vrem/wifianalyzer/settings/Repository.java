@@ -80,6 +80,16 @@ class Repository {
         }
     }
 
+    boolean getBoolean(int key, boolean defaultValue) {
+        String keyValue = MainContext.INSTANCE.getMainActivity().getString(key);
+        try {
+            return getSharedPreferences().getBoolean(keyValue, defaultValue);
+        } catch (Exception e) {
+            save(keyValue, "" + defaultValue);
+            return defaultValue;
+        }
+    }
+
     private SharedPreferences getSharedPreferences() {
         MainActivity mainActivity = MainContext.INSTANCE.getMainActivity();
         return PreferenceManager.getDefaultSharedPreferences(mainActivity);

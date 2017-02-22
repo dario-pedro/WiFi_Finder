@@ -175,6 +175,12 @@
     <string name="sort_by_key" translatable="false">sort_by</string>
     <string name="sort_by_default" translatable="false">0</string>
 
+    <string name="show_all_title">Show All</string>
+    <string name="show_all_summary" translatable="false">%s</string>
+    <string name="show_all_key" translatable="false">show_all</string>
+    <string name="show_all_default" translatable="false">0</string>
+
+
     <string name="group_by_title">Group Access Points By</string>
     <string name="group_by_summary" translatable="false">%s</string>
     <string name="group_by_key" translatable="false">group_by</string>

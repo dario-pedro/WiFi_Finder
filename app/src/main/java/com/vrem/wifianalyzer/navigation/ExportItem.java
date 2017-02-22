@@ -27,11 +27,15 @@ import android.widget.Toast;
 import com.vrem.wifianalyzer.MainActivity;
 import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
+import com.vrem.wifianalyzer.localization.PositionPoint;
+import com.vrem.wifianalyzer.odometry.Coordinates;
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail;
 import com.vrem.wifianalyzer.wifi.model.WiFiSignal;
 
 import java.util.List;
 import java.util.Locale;
+
+import static android.R.id.list;
 
 class ExportItem implements NavigationMenuItem {
 
@@ -39,11 +43,17 @@ class ExportItem implements NavigationMenuItem {
     public void activate(@NonNull MainActivity mainActivity, @NonNull MenuItem menuItem, @NonNull NavigationMenu navigationMenu) {
         String title = getTitle(mainActivity);
         List<WiFiDetail> wiFiDetails = getWiFiDetails();
+        List<PositionPoint> estimatives = getCoordsDetails();
         if (!dataAvailable(wiFiDetails)) {
             Toast.makeText(mainActivity, R.string.no_data, Toast.LENGTH_LONG).show();
             return;
         }
-        String data = getData(wiFiDetails);
+        String data = getWifiData(wiFiDetails);
+        data += "\n";
+
+        if(!estimatives.isEmpty())
+            data += getCoordsData(estimatives);
+
         Intent intent = createIntent(title, data);
         Intent chooser = createChooserIntent(intent, title);
         if (!exportAvailable(mainActivity, chooser)) {
@@ -62,37 +72,64 @@ class ExportItem implements NavigationMenuItem {
         return !wiFiDetails.isEmpty();
     }
 
-    String getData(@NonNull List<WiFiDetail> wiFiDetails) {
+    String getWifiData(@NonNull List<WiFiDetail> wiFiDetails) {
         StringBuilder result = new StringBuilder();
         result.append("WiFi Information:\n");
         result.append("SSID|BSSID|Strength|Primary Channel|Primary Frequency|Center Channel|Center Frequency|Width (Range)|Distance|Security\n");
         for (WiFiDetail wiFiDetail : wiFiDetails) {
             WiFiSignal wiFiSignal = wiFiDetail.getWiFiSignal();
             result.append(String.format(Locale.ENGLISH, "%s|%s|%ddBm|%d|%d%s|%d|%d%s|%d%s (%d - %d)|%.1fm|%s\n\n",
-                wiFiDetail.getSSID(),
-                wiFiDetail.getBSSID(),
-                wiFiSignal.getLevel(),
-                wiFiSignal.getPrimaryWiFiChannel().getChannel(),
-                wiFiSignal.getPrimaryFrequency(),
-                WiFiSignal.FREQUENCY_UNITS,
-                wiFiSignal.getCenterWiFiChannel().getChannel(),
-                wiFiSignal.getCenterFrequency(),
-                WiFiSignal.FREQUENCY_UNITS,
-                wiFiSignal.getWiFiWidth().getFrequencyWidth(),
-                WiFiSignal.FREQUENCY_UNITS,
-                wiFiSignal.getFrequencyStart(),
-                wiFiSignal.getFrequencyEnd(),
-                wiFiSignal.getDistance(),
-                wiFiDetail.getCapabilities()));
+                    wiFiDetail.getSSID(),
+                    wiFiDetail.getBSSID(),
+                    wiFiSignal.getLevel(),
+                    wiFiSignal.getPrimaryWiFiChannel().getChannel(),
+                    wiFiSignal.getPrimaryFrequency(),
+                    WiFiSignal.FREQUENCY_UNITS,
+                    wiFiSignal.getCenterWiFiChannel().getChannel(),
+                    wiFiSignal.getCenterFrequency(),
+                    WiFiSignal.FREQUENCY_UNITS,
+                    wiFiSignal.getWiFiWidth().getFrequencyWidth(),
+                    WiFiSignal.FREQUENCY_UNITS,
+                    wiFiSignal.getFrequencyStart(),
+                    wiFiSignal.getFrequencyEnd(),
+                    wiFiSignal.getDistance(),
+                    wiFiDetail.getCapabilities()));
         }
-        result.append("Direction Information:\n");
-        result.append("TODO!!!!");
         return result.toString();
     }
 
 
+    String getCoordsData(@NonNull List<PositionPoint> coordinates) {
+        StringBuilder result = new StringBuilder();
+        result.append("Coordinates Information:\n");
+        result.append("(x,y)\n\n");
+
+        int i = 1;
+
+        for (PositionPoint positionPoint : coordinates) {
+
+            if(i%4 != 0)
+                result.append(String.format(Locale.ENGLISH, "%d. (%.2f,%.2f) distance = %.2f\n",
+                        i,positionPoint.getPosition().getX()/100,positionPoint.getPosition().getY()/100,
+                        positionPoint.getDistance()));
+            else
+                result.append(String.format(Locale.ENGLISH, "estimative. (%.2f,%.2f)\n",
+                        positionPoint.getPosition().getX()/100,positionPoint.getPosition().getY()/100));
+
+            ++i;
+        }
+        return result.toString();
+    }
+
+
+
+
     private List<WiFiDetail> getWiFiDetails() {
         return MainContext.INSTANCE.getScanner().getWiFiData().getWiFiDetails();
+    }
+
+    private List<PositionPoint> getCoordsDetails() {
+        return MainContext.INSTANCE.getmEstimativesList();
     }
 
     @NonNull

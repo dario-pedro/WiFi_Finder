@@ -1,8 +1,11 @@
 package com.vrem.wifianalyzer.localization;
 
+import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.odometry.Coordinates;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
 import static com.vrem.wifianalyzer.localization.TrilaterationSolver.solve;
 
@@ -11,6 +14,7 @@ import static com.vrem.wifianalyzer.localization.TrilaterationSolver.solve;
  */
 
 public class PositionData {
+
 
     private static final int  NUMBER_OF_STORED_MAX = 3;
 
@@ -33,7 +37,6 @@ public class PositionData {
         this.estimatedTargetPosition = new Coordinates();
         this.positionEstimated = false;
         this.points = new ArrayDeque<>();
-
         highestValues = new PositionPoint[NUMBER_OF_STORED_MAX];
 
         for (int i = NUMBER_OF_STORED_MAX-1 ; i >= 0  ; i--)
@@ -77,9 +80,14 @@ public class PositionData {
            estimatedTargetPosition = solve(highestValues[0].getPosition(),
                                             highestValues[1].getPosition(),
                                             highestValues[2].getPosition(),
-                                            highestValues[0].getDistance(),
-                                            highestValues[1].getDistance(),
-                                            highestValues[2].getDistance());
+                                            highestValues[0].getDistance()*100,
+                                            highestValues[1].getDistance()*100,
+                                            highestValues[2].getDistance()*100);
+
+            MainContext.INSTANCE.addEstimative(highestValues[0]);
+            MainContext.INSTANCE.addEstimative(highestValues[1]);
+            MainContext.INSTANCE.addEstimative(highestValues[2]);
+            MainContext.INSTANCE.addEstimative(new PositionPoint(estimatedTargetPosition,null));
         }
 
 

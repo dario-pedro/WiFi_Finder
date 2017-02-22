@@ -42,9 +42,9 @@ public class StepCounterService extends Service {
 
 
 		//generate sensors
-		accell = new StepAccel(this);
-		detector = new StepDetector(this);
-		counter = new StepCounter(this);
+		accell = new StepAccel();
+		detector = new StepDetector();
+		counter = new StepCounter();
 
 
 

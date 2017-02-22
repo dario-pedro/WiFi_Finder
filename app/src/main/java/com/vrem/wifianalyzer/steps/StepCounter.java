@@ -6,7 +6,12 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.util.Log;
 
+import com.vrem.wifianalyzer.odometry.OdomInterface;
+
+
 public class StepCounter implements SensorEventListener {
+
+	private OdomInterface stepEvent;
 
 	public static int CURRENT_STEP = 0;
 
@@ -19,7 +24,7 @@ public class StepCounter implements SensorEventListener {
 		CURRENT_STEP =0;
 	}
 
-	public StepCounter(Context context) {
+	public StepCounter() {
 		// TODO Auto-generated constructor stub
 		super();
 		first_time = true;
@@ -42,6 +47,8 @@ public class StepCounter implements SensorEventListener {
 				}
 
 				CURRENT_STEP = (int) (event.values[0] - end);
+				if(stepEvent!=null)
+					stepEvent.update(CURRENT_STEP);
 			}
 		}
 	}

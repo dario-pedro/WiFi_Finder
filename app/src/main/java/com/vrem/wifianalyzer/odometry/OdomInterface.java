@@ -16,28 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.vrem.wifianalyzer.wifi.graph.time;
+package com.vrem.wifianalyzer.odometry;
 
-import com.vrem.wifianalyzer.wifi.band.WiFiBand;
-import com.vrem.wifianalyzer.wifi.graph.tools.GraphAdapter;
-import com.vrem.wifianalyzer.wifi.graph.tools.GraphViewNotifier;
+import android.support.annotation.NonNull;
+import android.view.MenuItem;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.vrem.wifianalyzer.MainActivity;
+import com.vrem.wifianalyzer.navigation.NavigationMenu;
 
-class TimeGraphAdapter extends GraphAdapter {
-    TimeGraphAdapter() {
-        super(makeGraphViewNotifiers());
-    }
-
-    private static List<GraphViewNotifier> makeGraphViewNotifiers() {
-        List<GraphViewNotifier> graphViewNotifiers = new ArrayList<>();
-
-        //if()
-
-        for (WiFiBand wiFiBand : WiFiBand.values()) {
-            graphViewNotifiers.add(new TimeGraphView(wiFiBand));
-        }
-        return graphViewNotifiers;
-    }
+public interface OdomInterface {
+    void update(int steps);
 }

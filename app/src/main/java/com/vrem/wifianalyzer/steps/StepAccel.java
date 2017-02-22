@@ -7,7 +7,12 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import com.vrem.wifianalyzer.odometry.OdomInterface;
+import com.vrem.wifianalyzer.odometry.OdometryFragment;
+
 public class StepAccel implements SensorEventListener {
+
+	private OdomInterface stepEvent;
 
 	public static int CURRENT_STEP = 0;
 
@@ -26,7 +31,7 @@ public class StepAccel implements SensorEventListener {
 	private int mLastMatch = -1;
 
 
-	public StepAccel(Context context) {
+	public StepAccel() {
 		// TODO Auto-generated constructor stub
 		super();
 		int h = 480;
@@ -34,14 +39,22 @@ public class StepAccel implements SensorEventListener {
 		mScale[0] = -(h * 0.5f * (1.0f / (SensorManager.STANDARD_GRAVITY * 2)));
 		mScale[1] = -(h * 0.5f * (1.0f / (SensorManager.MAGNETIC_FIELD_EARTH_MAX)));
 		SENSITIVITY = 3;
-		/*if (SettingsActivity.sharedPreferences == null) {
-			SettingsActivity.sharedPreferences = context.getSharedPreferences(
-					SettingsActivity.SETP_SHARED_PREFERENCES,
-					Context.MODE_PRIVATE);
-		}
-		SENSITIVITY = SettingsActivity.sharedPreferences.getInt(
-				SettingsActivity.SENSITIVITY_VALUE, 3);*/
+
 	}
+
+
+    public StepAccel(OdomInterface inter) {
+        // TODO Auto-generated constructor stub
+        super();
+        int h = 480;
+        mYOffset = h * 0.5f;
+        mScale[0] = -(h * 0.5f * (1.0f / (SensorManager.STANDARD_GRAVITY * 2)));
+        mScale[1] = -(h * 0.5f * (1.0f / (SensorManager.MAGNETIC_FIELD_EARTH_MAX)));
+        SENSITIVITY = 3;
+
+       stepEvent = inter;
+
+    }
 
 
 
@@ -79,6 +92,10 @@ public class StepAccel implements SensorEventListener {
 								Log.i("StepAccel", "CURRENT_STEP:"
 										+ CURRENT_STEP);
 								CURRENT_STEP++;
+
+								if(stepEvent!=null)
+									stepEvent.update(CURRENT_STEP);
+
 								mLastMatch = extType;
 								start = end;
 							}
