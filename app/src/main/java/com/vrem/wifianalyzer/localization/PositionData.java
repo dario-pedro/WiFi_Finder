@@ -80,9 +80,9 @@ public class PositionData {
            estimatedTargetPosition = solve(highestValues[0].getPosition(),
                                             highestValues[1].getPosition(),
                                             highestValues[2].getPosition(),
-                                            highestValues[0].getDistance()*100,
-                                            highestValues[1].getDistance()*100,
-                                            highestValues[2].getDistance()*100);
+                                            highestValues[0].getDistance(),
+                                            highestValues[1].getDistance(),
+                                            highestValues[2].getDistance());
 
             MainContext.INSTANCE.addEstimative(highestValues[0]);
             MainContext.INSTANCE.addEstimative(highestValues[1]);

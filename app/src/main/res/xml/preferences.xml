@@ -36,13 +36,13 @@
         android:title="@string/scan_interval_title"/>
 
     <ListPreference
-        android:defaultValue="Yes"
+        android:defaultValue="@string/show_all_default"
         android:entries="@array/show_all_array"
-        android:entryValues="@array/show_all_array"
-        android:key="@string/sort_by_key"
+        android:entryValues="@array/show_all_index_array"
+        android:key="@string/show_all_key"
         android:persistent="true"
-        android:summary="@string/sort_by_summary"
-        android:title="@string/sort_by_title"/>
+        android:summary="@string/show_all_summary"
+        android:title="@string/show_all_title"/>
 
     <ListPreference
         android:defaultValue="@string/sort_by_default"

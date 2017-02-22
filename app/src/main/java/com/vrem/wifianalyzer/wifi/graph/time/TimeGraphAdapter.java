@@ -18,6 +18,7 @@
 
 package com.vrem.wifianalyzer.wifi.graph.time;
 
+import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.wifi.band.WiFiBand;
 import com.vrem.wifianalyzer.wifi.graph.tools.GraphAdapter;
 import com.vrem.wifianalyzer.wifi.graph.tools.GraphViewNotifier;
@@ -32,8 +33,6 @@ class TimeGraphAdapter extends GraphAdapter {
 
     private static List<GraphViewNotifier> makeGraphViewNotifiers() {
         List<GraphViewNotifier> graphViewNotifiers = new ArrayList<>();
-
-        //if()
 
         for (WiFiBand wiFiBand : WiFiBand.values()) {
             graphViewNotifiers.add(new TimeGraphView(wiFiBand));

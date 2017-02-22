@@ -62,9 +62,14 @@ class TimeGraphView implements GraphViewNotifier {
     public void update(@NonNull WiFiData wiFiData) {
         Settings settings = MainContext.INSTANCE.getSettings();
         Set<WiFiDetail> newSeries = new TreeSet<>();
+
+        boolean showAll = MainContext.INSTANCE.getSettings().getShowAll();
+
         for (WiFiDetail wiFiDetail : wiFiData.getWiFiDetails(wiFiBand, settings.getSortBy())) {
             newSeries.add(wiFiDetail);
             addData(wiFiDetail);
+            if(!showAll)
+                break;
         }
         graphViewWrapper.removeSeries(newSeries);
         graphViewWrapper.updateLegend(settings.getTimeGraphLegend());

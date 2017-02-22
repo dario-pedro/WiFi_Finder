@@ -33,6 +33,11 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="show_all_index_array" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
     <string-array name="sort_by_array">
         <item>Signal Strength</item>
         <item>SSID</item>

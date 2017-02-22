@@ -21,6 +21,7 @@ package com.vrem.wifianalyzer.settings;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
 import com.vrem.wifianalyzer.navigation.NavigationMenu;
 import com.vrem.wifianalyzer.wifi.AccessPointView;
@@ -62,9 +63,11 @@ public class Settings {
         return repository.getInteger(R.string.weight_key,R.integer.weight_default);
     }
 
-    public int getShowAll(){
-        return repository.getInteger(R.string.weight_key,R.integer.weight_default);
+    public boolean getShowAll(){
+        String default_showAll = MainContext.INSTANCE.getMainActivity().getResources().getString(R.string.show_all_default);
+        return "0".equals(repository.getString(R.string.show_all_key, default_showAll));
     }
+
 
 
 

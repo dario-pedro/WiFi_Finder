@@ -111,7 +111,7 @@ class ExportItem implements NavigationMenuItem {
             if(i%4 != 0)
                 result.append(String.format(Locale.ENGLISH, "%d. (%.2f,%.2f) distance = %.2f\n",
                         i,positionPoint.getPosition().getX()/100,positionPoint.getPosition().getY()/100,
-                        positionPoint.getDistance()));
+                        positionPoint.getDistance()/100));
             else
                 result.append(String.format(Locale.ENGLISH, "estimative. (%.2f,%.2f)\n",
                         positionPoint.getPosition().getX()/100,positionPoint.getPosition().getY()/100));
