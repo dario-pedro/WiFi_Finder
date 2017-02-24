@@ -44,15 +44,23 @@ class ExportItem implements NavigationMenuItem {
         String title = getTitle(mainActivity);
         List<WiFiDetail> wiFiDetails = getWiFiDetails();
         List<PositionPoint> estimatives = getCoordsDetails();
+        List<PositionPoint> allPoints = getPositionPointsDetails();
         if (!dataAvailable(wiFiDetails)) {
             Toast.makeText(mainActivity, R.string.no_data, Toast.LENGTH_LONG).show();
             return;
         }
         String data = getWifiData(wiFiDetails);
-        data += "\n";
 
-        if(!estimatives.isEmpty())
+
+        if(!estimatives.isEmpty()) {
+            data += "\n";
             data += getCoordsData(estimatives);
+        }
+
+        if(!allPoints.isEmpty()) {
+            data += "\n";
+            data += getPositionPointsData(allPoints);
+        }
 
         Intent intent = createIntent(title, data);
         Intent chooser = createChooserIntent(intent, title);
@@ -102,7 +110,7 @@ class ExportItem implements NavigationMenuItem {
     String getCoordsData(@NonNull List<PositionPoint> coordinates) {
         StringBuilder result = new StringBuilder();
         result.append("Coordinates Information:\n");
-        result.append("(x,y)\n\n");
+        result.append("(x,y) in meters\n\n");
 
         int i = 1;
 
@@ -121,6 +129,30 @@ class ExportItem implements NavigationMenuItem {
         return result.toString();
     }
 
+    String getPositionPointsData(@NonNull List<PositionPoint> coordinates) {
+        StringBuilder result = new StringBuilder();
+        result.append("All Points:\n");
+        result.append("(x,y) in meters\n\n");
+
+        int i = 1;
+
+        for (PositionPoint positionPoint : coordinates) {
+
+            if(positionPoint.getDistance() < 10000000)
+
+                result.append(String.format(Locale.ENGLISH, "%d. (%.2f,%.2f) distance = %.2f\n",
+                        i++,positionPoint.getPosition().getX()/100,positionPoint.getPosition().getY()/100,
+                        positionPoint.getDistance()/100));
+            else
+
+                result.append(String.format(Locale.ENGLISH, "%d. (%.2f,%.2f) distance> 10km\n",
+                        i++,positionPoint.getPosition().getX()/100,positionPoint.getPosition().getY()/100));
+
+
+        }
+        return result.toString();
+    }
+
 
 
 
@@ -130,6 +162,10 @@ class ExportItem implements NavigationMenuItem {
 
     private List<PositionPoint> getCoordsDetails() {
         return MainContext.INSTANCE.getmEstimativesList();
+    }
+
+    private List<PositionPoint> getPositionPointsDetails() {
+        return MainContext.INSTANCE.getmAllPointsList();
     }
 
     @NonNull

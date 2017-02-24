@@ -16,7 +16,16 @@ import static com.vrem.wifianalyzer.localization.TrilaterationSolver.solve;
 public class PositionData {
 
 
+    /**
+     * Number of Points used for estimation
+     */
     private static final int  NUMBER_OF_STORED_MAX = 3;
+
+    /**
+     * Minimal distance in cm between 2 points used
+     * for estimation
+     */
+    private static final float  MIN_DIST = 50.0f;
 
     public boolean positionEstimated;
 
@@ -54,6 +63,7 @@ public class PositionData {
 
         if (p != null) {
             points.addFirst(p);
+            MainContext.INSTANCE.addPositionPoint(p);
         }
 
         if(points.size() > 2) {
@@ -110,6 +120,11 @@ public class PositionData {
 
 
     private boolean  addNewPoint(boolean positionEstimated, PositionPoint p){
+
+
+        if(!isInMinDistance(p))
+            return false;
+
         boolean require_recalculate_estimation = false;
 
         for(int i = highestValues.length -1 ; i >= 0 ; i--)
@@ -145,6 +160,21 @@ public class PositionData {
         return require_recalculate_estimation;
     }
 
+    private boolean isInMinDistance(PositionPoint p)
+    {
+        for(int i = highestValues.length -1 ; i >= 0 ; i--)
+        {
+            /**
+             * Distance between the point in highest value i and the point p
+             */
+            float dbp = p.getPosition().distance_betweent(highestValues[i].getPosition());
+
+            if(dbp<MIN_DIST)
+                return false;
+        }
+        return true;
+    }
+
     private boolean containes_coordinates(PositionPoint[] points, PositionPoint p)
     {
         if(points==null || points.length==0)
@@ -157,7 +187,6 @@ public class PositionData {
         }
 
         return false;
-
 
     }
 

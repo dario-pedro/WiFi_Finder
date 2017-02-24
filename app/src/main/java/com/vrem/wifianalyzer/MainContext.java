@@ -43,6 +43,7 @@ public enum MainContext {
     private Database database;
     private Configuration configuration;
     private List<PositionPoint> mEstimativesList;
+    private List<PositionPoint> mAllPointsList;
 
     public List<PositionPoint> getmEstimativesList() {
         return mEstimativesList;
@@ -52,9 +53,22 @@ public enum MainContext {
         this.mEstimativesList = mEstimativesList;
     }
 
+    public List<PositionPoint> getmAllPointsList() {
+        return mAllPointsList;
+    }
+
+    public void setmAllPointsList(List<PositionPoint> mAllPointsList) {
+        this.mAllPointsList = mAllPointsList;
+    }
+
     public void addEstimative(PositionPoint positionPoint)
     {
         mEstimativesList.add(positionPoint);
+    }
+
+    public void addPositionPoint(PositionPoint positionPoint)
+    {
+        mAllPointsList.add(positionPoint);
     }
 
     public Settings getSettings() {
@@ -112,6 +126,7 @@ public enum MainContext {
         Configuration configuration = new Configuration(isLargeScreenLayout);
 
         mEstimativesList = new ArrayList<PositionPoint>();
+        mAllPointsList = new ArrayList<PositionPoint>();
 
         setMainActivity(mainActivity);
         setConfiguration(configuration);
