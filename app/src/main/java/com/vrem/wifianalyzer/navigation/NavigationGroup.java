@@ -26,7 +26,7 @@ public enum NavigationGroup {
     GROUP_ODOM(NavigationMenu.GOOGLE_MAPS,NavigationMenu.FIND_AP,NavigationMenu.ODOMETRY,
             NavigationMenu.SENSOR_FUSION,NavigationMenu.STEP_COUNTER),
     GROUP_OTHER(NavigationMenu.CHANNEL_AVAILABLE, NavigationMenu.VENDOR_LIST),
-    GROUP_SETTINGS(NavigationMenu.EXPORT,NavigationMenu.SETTINGS,NavigationMenu.ACCESS_POINTS.CONTACTS);
+    GROUP_SETTINGS(NavigationMenu.EXPORT,NavigationMenu.SENDDB,NavigationMenu.SETTINGS,NavigationMenu.ACCESS_POINTS.CONTACTS);
 
     private final NavigationMenu[] navigationMenu;
 

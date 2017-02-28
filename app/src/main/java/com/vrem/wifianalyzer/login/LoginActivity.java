@@ -3,6 +3,7 @@ package com.vrem.wifianalyzer.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -28,7 +29,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
 
+import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
 
 
@@ -36,6 +39,11 @@ import com.vrem.wifianalyzer.R;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+
+
+    static boolean isLoggedIn = false;
+    static String userLogged = "";
+
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -58,34 +66,46 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        setupActionBar();
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.txt_email);
-        populateAutoComplete();
 
-        mPasswordView = (EditText) findViewById(R.id.txt_password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
+        if(isLoggedIn)
+        {
+            setContentView(R.layout.activity_already_login);
+
+            //Set the userName , to user previously logged
+            TextView userTV = (TextView) findViewById(R.id.user_name);
+            userTV.setText(userLogged);
+        }
+        else{ // USER REQUIRE TO LOGIN
+
+            setContentView(R.layout.activity_login);
+            setupActionBar();
+            // Set up the login form.
+            mEmailView = (AutoCompleteTextView) findViewById(R.id.txt_email);
+            populateAutoComplete();
+
+            mPasswordView = (EditText) findViewById(R.id.txt_password);
+            mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                    if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                        attemptLogin();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+            Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+            mEmailSignInButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    attemptLogin();
+                }
+            });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+            mLoginFormView = findViewById(R.id.login_form);
+            mProgressView = findViewById(R.id.login_progress);
+        }
     }
 
     private void populateAutoComplete() {
@@ -263,6 +283,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private String result;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -273,7 +294,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            String answer = RemoteFetch.test(mEmail,mPassword);
+            //String answer = RemoteFetch.test(mEmail,mPassword);
 
 
             /*for (String credential : DUMMY_CREDENTIALS) {
@@ -285,7 +306,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }*/
 
             // TODO: register the new account here.
-            return true;
+            result =  RemoteFetch.login(mEmail,mPassword).trim();
+            return !"0".equals(result);
         }
 
         @Override
@@ -294,7 +316,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                LoginActivity.isLoggedIn = success;
+                userLogged = result;
                 finish();
+                MainContext.INSTANCE.getMainActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Code to run in GUI thread here
+                        Snackbar snackbar = Snackbar
+                                .make(MainContext.INSTANCE.getMainActivity().getCurrentFocus(), "Welcome "+result+"!", Snackbar.LENGTH_LONG);
+
+                        snackbar.show();
+                    }
+                });
+
+
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

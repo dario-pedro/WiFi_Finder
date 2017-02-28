@@ -46,6 +46,7 @@ public enum NavigationMenu {
 
 
     EXPORT(R.drawable.ic_import_export_grey_500_48dp, R.string.action_export, new ExportItem()),
+    SENDDB(R.drawable.ic_dns_black_24dp, R.string.action_senddb, new SendDBItem()),
     SETTINGS(R.drawable.ic_settings_grey_500_48dp, R.string.action_settings, new ActivityItem(SettingActivity.class)),
     CONTACTS(R.drawable.ic_info_outline_grey_500_48dp, R.string.action_contacts, new FragmentItem(new ContactsFragment()));
 
