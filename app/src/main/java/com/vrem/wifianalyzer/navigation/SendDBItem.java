@@ -41,7 +41,7 @@ class SendDBItem implements NavigationMenuItem {
         String title = getTitle(mainActivity);
         List<WiFiDetail> wiFiDetails = getWiFiDetails();
         List<PositionPoint> estimatives = getCoordsDetails();
-        List<PositionPoint> allPoints = getPositionPointsDetails();
+        //List<PositionPoint> allPoints = getPositionPointsDetails();
         if (!dataAvailable(wiFiDetails)) {
             Toast.makeText(mainActivity, R.string.no_data, Toast.LENGTH_LONG).show();
             return;
@@ -54,10 +54,10 @@ class SendDBItem implements NavigationMenuItem {
             data += getCoordsData(estimatives);
         }
 
-        if(!allPoints.isEmpty()) {
+        /*if(!allPoints.isEmpty()) {
             data += "\n";
             data += getPositionPointsData(allPoints);
-        }
+        }*/
 
         Intent intent = createIntent(title, data);
         Intent chooser = createChooserIntent(intent, title);
@@ -161,7 +161,7 @@ class SendDBItem implements NavigationMenuItem {
         return MainContext.INSTANCE.getmEstimativesList();
     }
 
-    private List<PositionPoint> getPositionPointsDetails() {
+    private List<List<PositionPoint>> getPositionPointsDetails() {
         return MainContext.INSTANCE.getmAllPointsList();
     }
 

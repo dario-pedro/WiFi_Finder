@@ -63,7 +63,6 @@ public class PositionData {
 
         if (p != null) {
             points.addFirst(p);
-            MainContext.INSTANCE.addPositionPoint(p);
         }
 
         if(points.size() > 2) {
@@ -100,6 +99,53 @@ public class PositionData {
 
 
     }
+
+    public void addPoint(PositionPoint p,short index){
+
+        while (points.size() >= MAX_POINTS_STORAGE) {
+            points.pollLast();
+        }
+
+        if (p != null) {
+            points.addFirst(p);
+            MainContext.INSTANCE.addPositionPoint(p,index);
+        }
+
+        if(points.size() > 2) {
+            positionEstimated = true;
+        }
+
+        boolean require_recalculate_estimation = false;
+
+
+        if(replace_coordinates(p))
+        {
+            require_recalculate_estimation = positionEstimated;
+        }
+        else{
+            require_recalculate_estimation = addNewPoint(positionEstimated,p);
+        }
+
+
+
+        if(require_recalculate_estimation)
+        {
+            estimatedTargetPosition = solve(highestValues[0].getPosition(),
+                    highestValues[1].getPosition(),
+                    highestValues[2].getPosition(),
+                    highestValues[0].getDistance(),
+                    highestValues[1].getDistance(),
+                    highestValues[2].getDistance());
+
+            MainContext.INSTANCE.addEstimative(highestValues[0]);
+            MainContext.INSTANCE.addEstimative(highestValues[1]);
+            MainContext.INSTANCE.addEstimative(highestValues[2]);
+            MainContext.INSTANCE.addEstimative(new PositionPoint(estimatedTargetPosition,null));
+        }
+
+
+    }
+
 
     public Coordinates getTargetPosition()
     {

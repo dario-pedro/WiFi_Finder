@@ -25,6 +25,7 @@ import android.support.annotation.NonNull;
 
 import com.vrem.wifianalyzer.localization.PositionPoint;
 import com.vrem.wifianalyzer.odometry.Coordinates;
+import com.vrem.wifianalyzer.odometry.Odom;
 import com.vrem.wifianalyzer.settings.Settings;
 import com.vrem.wifianalyzer.vendor.model.Database;
 import com.vrem.wifianalyzer.vendor.model.VendorService;
@@ -43,7 +44,9 @@ public enum MainContext {
     private Database database;
     private Configuration configuration;
     private List<PositionPoint> mEstimativesList;
-    private List<PositionPoint> mAllPointsList;
+    private List<List<PositionPoint>> mAllPointsList;
+
+
 
     public List<PositionPoint> getmEstimativesList() {
         return mEstimativesList;
@@ -53,11 +56,11 @@ public enum MainContext {
         this.mEstimativesList = mEstimativesList;
     }
 
-    public List<PositionPoint> getmAllPointsList() {
+    public List<List<PositionPoint>> getmAllPointsList() {
         return mAllPointsList;
     }
 
-    public void setmAllPointsList(List<PositionPoint> mAllPointsList) {
+    public void setmAllPointsList(List<List<PositionPoint>> mAllPointsList) {
         this.mAllPointsList = mAllPointsList;
     }
 
@@ -66,9 +69,9 @@ public enum MainContext {
         mEstimativesList.add(positionPoint);
     }
 
-    public void addPositionPoint(PositionPoint positionPoint)
+    public void addPositionPoint(PositionPoint positionPoint,short index)
     {
-        mAllPointsList.add(positionPoint);
+        mAllPointsList.get(index).add(positionPoint);
     }
 
     public Settings getSettings() {
@@ -126,7 +129,19 @@ public enum MainContext {
         Configuration configuration = new Configuration(isLargeScreenLayout);
 
         mEstimativesList = new ArrayList<PositionPoint>();
-        mAllPointsList = new ArrayList<PositionPoint>();
+
+        mAllPointsList = new ArrayList<List<PositionPoint>>();
+
+        /**
+         * Initialize the 5 lists to be debugged
+         */
+        for (int i = 0; i < 6 ; i++) {
+            List<PositionPoint> list_of_pp = new ArrayList<PositionPoint>();
+            mAllPointsList.add(list_of_pp);
+        }
+        
+
+
 
         setMainActivity(mainActivity);
         setConfiguration(configuration);

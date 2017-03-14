@@ -30,8 +30,19 @@ public class PositionPoint implements Cloneable {
 
         this.store_time = new Date();
 
+
+
+
         this.distance = (info != null && info.size() > -1) ?
             info.get(0).getWiFiSignal().getDistance()*m_to_cm : Double.MAX_VALUE;
+
+
+    }
+
+    public PositionPoint(Coordinates position, double angle) {
+        this.position = position;
+        this.store_time = new Date();
+        this.distance = angle;
 
 
     }

@@ -44,6 +44,13 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
     private Odom mOdom;
 
+    private Odom mOdom_ACCELEROMETERCOMPASSPROVIDER;
+    private Odom mOdom_IMPROVEDORIENTATIONSENSOR1PROVIDER;
+    private Odom mOdom_IMPROVEDORIENTATIONSENSOR2PROVIDER;
+    private Odom mOdom_ROTATIONVECTORPROVIDER;
+    private Odom mOdom_GRAVITYCOMPASSPROVIDER;
+    private Odom mOdom_CALIBRATEDGYROSCOPEPROVIDER;
+
     private Handler mHandler;
 
     private boolean mKeepRunningUI;
@@ -72,6 +79,12 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
         tvEY = (TextView) view.findViewById(R.id.textView_estY_value);
 
         mOdom = new Odom();
+        /*mOdom_ACCELEROMETERCOMPASSPROVIDER = new Odom(Odom.ACCELEROMETERCOMPASSPROVIDER,Odom.ACCELEROMETER);
+        mOdom_IMPROVEDORIENTATIONSENSOR1PROVIDER = new Odom(Odom.IMPROVEDORIENTATIONSENSOR1PROVIDER,Odom.ACCELEROMETER);
+        mOdom_IMPROVEDORIENTATIONSENSOR2PROVIDER = new Odom(Odom.IMPROVEDORIENTATIONSENSOR2PROVIDER,Odom.ACCELEROMETER);
+        mOdom_ROTATIONVECTORPROVIDER = new Odom(Odom.ROTATIONVECTORPROVIDER,Odom.ACCELEROMETER);
+        mOdom_GRAVITYCOMPASSPROVIDER = new Odom(Odom.GRAVITYCOMPASSPROVIDER,Odom.ACCELEROMETER);
+        mOdom_CALIBRATEDGYROSCOPEPROVIDER = new Odom(Odom.CALIBRATEDGYROSCOPEPROVIDER,Odom.ACCELEROMETER);*/
 
         mHandler = new Handler();
 
@@ -116,6 +129,16 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
         wiFiDetails = wiFiData.getWiFiDetails(settings.getWiFiBand(), settings.getSortBy(), settings.getGroupBy());
 
         Coordinates curr_coords = new Coordinates(mOdom.getCoords());
+
+        //mOdom.saveCoords();
+
+        /*mOdom_ACCELEROMETERCOMPASSPROVIDER.saveCoords();
+        mOdom_IMPROVEDORIENTATIONSENSOR1PROVIDER.saveCoords();
+        mOdom_IMPROVEDORIENTATIONSENSOR2PROVIDER.saveCoords();
+        mOdom_ROTATIONVECTORPROVIDER.saveCoords();
+        mOdom_GRAVITYCOMPASSPROVIDER.saveCoords();
+        mOdom_CALIBRATEDGYROSCOPEPROVIDER.saveCoords();*/
+
 
         positionData.addPoint(new PositionPoint(curr_coords,wiFiDetails));
 

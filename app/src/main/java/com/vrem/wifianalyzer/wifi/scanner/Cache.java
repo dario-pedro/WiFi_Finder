@@ -82,11 +82,14 @@ class Cache {
     int getCacheSize() {
         Settings settings = MainContext.INSTANCE.getSettings();
         int scanInterval = settings.getScanInterval();
-        if (scanInterval < 5) {
+        if (scanInterval < 4) {
             return 4;
         }
-        if (scanInterval < 10) {
+        if (scanInterval < 8) {
             return 3;
+        }
+        if (scanInterval < 12) {
+            return 2;
         }
         if (scanInterval < 20) {
             return 2;

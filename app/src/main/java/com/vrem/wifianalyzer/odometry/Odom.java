@@ -14,11 +14,17 @@ import android.util.Log;
 
 import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
+import com.vrem.wifianalyzer.localization.PositionPoint;
 import com.vrem.wifianalyzer.sensor_fusion.HardwareChecker;
 import com.vrem.wifianalyzer.sensor_fusion.SensorChecker;
 import com.vrem.wifianalyzer.sensor_fusion.SensorSelectionActivity;
+import com.vrem.wifianalyzer.sensor_fusion.orientationProvider.AccelerometerCompassProvider;
+import com.vrem.wifianalyzer.sensor_fusion.orientationProvider.CalibratedGyroscopeProvider;
+import com.vrem.wifianalyzer.sensor_fusion.orientationProvider.GravityCompassProvider;
 import com.vrem.wifianalyzer.sensor_fusion.orientationProvider.ImprovedOrientationSensor1Provider;
+import com.vrem.wifianalyzer.sensor_fusion.orientationProvider.ImprovedOrientationSensor2Provider;
 import com.vrem.wifianalyzer.sensor_fusion.orientationProvider.OrientationProvider;
+import com.vrem.wifianalyzer.sensor_fusion.orientationProvider.RotationVectorProvider;
 import com.vrem.wifianalyzer.steps.StepAccel;
 
 
@@ -29,6 +35,23 @@ import static android.content.Context.SENSOR_SERVICE;
  */
 
 public class Odom implements OdomInterface  {
+
+    public static final short NOT_STEP = -1;
+
+    public static final short ACCELEROMETERCOMPASSPROVIDER = 0;
+    public static final short CALIBRATEDGYROSCOPEPROVIDER = 1;
+    public static final short GRAVITYCOMPASSPROVIDER = 2;
+    public static final short IMPROVEDORIENTATIONSENSOR1PROVIDER = 3;
+    public static final short IMPROVEDORIENTATIONSENSOR2PROVIDER = 4;
+    public static final short ROTATIONVECTORPROVIDER = 5;
+
+    public static final short ACCELEROMETER = 6;
+    public static final short STEPCOUNTER = 7;
+    public static final short STEPDETECTOR = 8;
+
+    public static final short DEFAULT = 5;// 4 -> 0 -> 1 -> 2 -> 3 ->5+
+    public static final short STEPDEFAULT = 6;
+
 
 
 
@@ -64,13 +87,43 @@ public class Odom implements OdomInterface  {
      */
     private double stepLength;
 
+    /**
+     * SensorManager is require to implement callbacks with the sensors
+     */
     private SensorManager mSensorManager;
 
+    /**
+     * Orientation and Step Types
+     * -1 means not set
+     */
+    private short mOrientationType = -1;
+    private short mStepsType = -1;
+
+    /**
+     * Current Phone Yaw Orientation
+     */
     public float yaw = 0;
+
+
+    public Odom(short TYPE_ORIENTATION, short TYPE_STEPS) {
+
+        super();
+
+        this.mStepsType = TYPE_STEPS;
+        this.mOrientationType = TYPE_ORIENTATION;
+
+        init();
+        mCoords = new Coordinates();
+
+    }
 
 
     public Odom() {
         super();
+
+        this.mStepsType = STEPDEFAULT;
+        this.mOrientationType = DEFAULT;
+
         init();
         mCoords = new Coordinates();
 
@@ -78,6 +131,10 @@ public class Odom implements OdomInterface  {
 
     public Odom(float x,float y) {
         super();
+
+        this.mStepsType = STEPDEFAULT;
+        this.mOrientationType = DEFAULT;
+
         init();
         mCoords = new Coordinates(x,y);
     }
@@ -87,6 +144,14 @@ public class Odom implements OdomInterface  {
     public Coordinates getCoords()
     {
         return mCoords;
+    }
+
+    public void saveCoords()
+    {
+        double angle = Math.toDegrees(yaw);
+        Coordinates storeCoords = new Coordinates(mCoords);
+        PositionPoint storePP = new PositionPoint(storeCoords,angle);
+        MainContext.INSTANCE.addPositionPoint(storePP,mOrientationType);
     }
 
 
@@ -106,8 +171,35 @@ public class Odom implements OdomInterface  {
             displayHardwareMissingWarning();
         }
 
-        currentOrientationProvider = new ImprovedOrientationSensor1Provider((SensorManager)
-                activity.getSystemService(SensorSelectionActivity.SENSOR_SERVICE));
+        switch (mOrientationType) {
+            case IMPROVEDORIENTATIONSENSOR1PROVIDER:
+                currentOrientationProvider = new ImprovedOrientationSensor1Provider((SensorManager) activity
+                        .getSystemService(SensorSelectionActivity.SENSOR_SERVICE));
+                break;
+            case IMPROVEDORIENTATIONSENSOR2PROVIDER:
+                currentOrientationProvider = new ImprovedOrientationSensor2Provider((SensorManager) activity
+                        .getSystemService(SensorSelectionActivity.SENSOR_SERVICE));
+                break;
+            case ROTATIONVECTORPROVIDER:
+                currentOrientationProvider = new RotationVectorProvider((SensorManager) activity.getSystemService(
+                        SensorSelectionActivity.SENSOR_SERVICE));
+                break;
+            case CALIBRATEDGYROSCOPEPROVIDER:
+                currentOrientationProvider = new CalibratedGyroscopeProvider((SensorManager) activity
+                        .getSystemService(SensorSelectionActivity.SENSOR_SERVICE));
+                break;
+            case GRAVITYCOMPASSPROVIDER:
+                currentOrientationProvider = new GravityCompassProvider((SensorManager) activity.getSystemService(
+                        SensorSelectionActivity.SENSOR_SERVICE));
+                break;
+            case ACCELEROMETERCOMPASSPROVIDER:
+                currentOrientationProvider = new AccelerometerCompassProvider((SensorManager) activity
+                        .getSystemService(SensorSelectionActivity.SENSOR_SERVICE));
+                break;
+            default:
+                break;
+        }
+
 
         currentOrientationProvider.start();
 
@@ -117,9 +209,6 @@ public class Odom implements OdomInterface  {
 
         stepLength =  MainContext.INSTANCE.getSettings().getStepLength();
         mSteps = 0;
-
-
-
 
         StepAccel sa = new StepAccel(this);
 
@@ -162,10 +251,9 @@ public class Odom implements OdomInterface  {
 
 
 
-
-
     @Override
     public void update(int steps) {
+        saveCoords();
         mSteps++;
         yaw = currentOrientationProvider.getEulerAngles().getYaw();
 

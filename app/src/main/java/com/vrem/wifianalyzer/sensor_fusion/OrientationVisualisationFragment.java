@@ -175,12 +175,13 @@ public class OrientationVisualisationFragment extends Fragment {
                     e.printStackTrace();
                 }
 
+
                 mHandler.post(new Runnable(){
                     public void run() {
                         EulerAngles ang = currentOrientationProvider.getEulerAngles();
-                        mButtonR.setText("R: "+formatDouble(ang.getRoll()));
-                        mButtonP.setText("P: "+formatDouble(ang.getPitch()));
-                        mButtonY.setText("Y: "+formatDouble(ang.getYaw()));
+                        mButtonR.setText("R: "+formatDouble(Math.toDegrees(ang.getRoll())));
+                        mButtonP.setText("P: "+formatDouble(Math.toDegrees(ang.getPitch())));
+                        mButtonY.setText("Y: "+formatDouble(Math.toDegrees(ang.getYaw())));
                     }
                 });
             }
@@ -192,7 +193,7 @@ public class OrientationVisualisationFragment extends Fragment {
      * @param value
      * @return ####.## formated float
      */
-    private String formatDouble(float value) {
+    private String formatDouble(double value) {
         DecimalFormat format = new DecimalFormat("####.##");
         String distanceStr = format.format(value);
         return distanceStr.equals(getString(R.string.zero)) ? getString(R.string.double_zero)
