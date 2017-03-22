@@ -41,6 +41,7 @@ public class Odom implements OdomInterface  {
     public static final short ACCELEROMETERCOMPASSPROVIDER = 0;
     public static final short CALIBRATEDGYROSCOPEPROVIDER = 1;
     public static final short GRAVITYCOMPASSPROVIDER = 2;
+
     public static final short IMPROVEDORIENTATIONSENSOR1PROVIDER = 3;
     public static final short IMPROVEDORIENTATIONSENSOR2PROVIDER = 4;
     public static final short ROTATIONVECTORPROVIDER = 5;
@@ -49,7 +50,7 @@ public class Odom implements OdomInterface  {
     public static final short STEPCOUNTER = 7;
     public static final short STEPDETECTOR = 8;
 
-    public static final short DEFAULT = 5;// 4 -> 0 -> 1 -> 2 -> 3 ->5+
+    public static final short DEFAULT = 5; // ORIENTATION DEFAULT
     public static final short STEPDEFAULT = 6;
 
 
@@ -144,6 +145,11 @@ public class Odom implements OdomInterface  {
     public Coordinates getCoords()
     {
         return mCoords;
+    }
+
+    public void resetCoords()
+    {
+        mCoords = new Coordinates();
     }
 
     public void saveCoords()

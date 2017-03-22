@@ -4,12 +4,16 @@ package com.vrem.wifianalyzer.odometry;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
 import java.text.DecimalFormat;
 
@@ -37,6 +41,21 @@ public class OdometryFragment extends Fragment {
 
         tvX = (TextView) view.findViewById(R.id.textViewX_value);
         tvY = (TextView) view.findViewById(R.id.textViewY_value);
+
+        final Button button = (Button) view.findViewById(R.id.resetButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Snackbar snackbar = Snackbar
+                        .make(MainContext.INSTANCE.getMainActivity().getCurrentFocus(), "Reset Success", Snackbar.LENGTH_LONG);
+
+                snackbar.show();
+
+                mOdom.resetCoords();
+            }
+        });
+
+        // setting the reset text wasnt working on layout
+        button.setText(MainContext.INSTANCE.getMainActivity().getString(R.string.reset));
 
         mOdom = new Odom();
 

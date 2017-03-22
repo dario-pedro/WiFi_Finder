@@ -1,10 +1,19 @@
 package com.vrem.wifianalyzer.localization;
 
+import android.util.Pair;
+
 import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.odometry.Coordinates;
+
+import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer;
+import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.RealVector;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.vrem.wifianalyzer.localization.TrilaterationSolver.solve;
@@ -14,6 +23,11 @@ import static com.vrem.wifianalyzer.localization.TrilaterationSolver.solve;
  */
 
 public class PositionData {
+
+
+    public static final char TRILATERATION = 'c';
+    public static final char MULTILATERATION = 't';
+
 
 
     /**
@@ -26,6 +40,11 @@ public class PositionData {
      * for estimation
      */
     private static final float  MIN_DIST = 50.0f;
+
+    /**
+     * By default use MULTILATERATION
+     */
+    private char mMode = MULTILATERATION;
 
     public boolean positionEstimated;
 
@@ -43,6 +62,17 @@ public class PositionData {
 
 
     public PositionData() {
+        init();
+    }
+
+    public PositionData(char mode) {
+        init();
+        this.mMode = mode;
+    }
+
+
+    private void init()
+    {
         this.estimatedTargetPosition = new Coordinates();
         this.positionEstimated = false;
         this.points = new ArrayDeque<>();
@@ -69,6 +99,31 @@ public class PositionData {
             positionEstimated = true;
         }
 
+
+        estimate(p);
+
+    }
+
+    private void estimate(PositionPoint p)
+    {
+        switch (mMode)
+        {
+            case TRILATERATION:
+                estimateTrilateration(p);
+                break;
+            case MULTILATERATION:
+                estimateMultilateration();
+                break;
+            default:
+                estimateMultilateration();
+                break;
+        }
+
+
+
+    }
+
+    private void estimateTrilateration(PositionPoint p) {
         boolean require_recalculate_estimation = false;
 
 
@@ -84,20 +139,62 @@ public class PositionData {
 
         if(require_recalculate_estimation)
         {
-           estimatedTargetPosition = solve(highestValues[0].getPosition(),
-                                            highestValues[1].getPosition(),
-                                            highestValues[2].getPosition(),
-                                            highestValues[0].getDistance(),
-                                            highestValues[1].getDistance(),
-                                            highestValues[2].getDistance());
+            estimatedTargetPosition = solve(highestValues[0].getPosition(),
+                    highestValues[1].getPosition(),
+                    highestValues[2].getPosition(),
+                    highestValues[0].getDistance(),
+                    highestValues[1].getDistance(),
+                    highestValues[2].getDistance());
 
             MainContext.INSTANCE.addEstimative(highestValues[0]);
             MainContext.INSTANCE.addEstimative(highestValues[1]);
             MainContext.INSTANCE.addEstimative(highestValues[2]);
             MainContext.INSTANCE.addEstimative(new PositionPoint(estimatedTargetPosition,null));
         }
+    }
 
 
+    private Pair<double[][],double[]> getDoublePoints(){
+
+
+
+        int number_points = points.size();
+
+        double[][] positions = new double[number_points][2];
+        double[] distances = new double[number_points];
+
+        Iterator it = points.iterator();
+
+        for (int i = 0; i< number_points ; i++)
+        {
+            PositionPoint p = (PositionPoint) it.next();
+            positions[i] =  p.getPosition().getDoubles();
+            distances[i] = p.getDistance();
+        }
+
+
+
+
+        return new Pair<>(positions,distances);
+    }
+
+    private double[] estimateMultilateration()
+    {
+        Pair<double[][],double[]> points = getDoublePoints();
+        double[][] positions = points.first;
+        double[] distances = points.second;
+
+        NonLinearLeastSquaresSolver solver = new NonLinearLeastSquaresSolver(new MultilaterationFunction(positions, distances), new LevenbergMarquardtOptimizer());
+        LeastSquaresOptimizer.Optimum optimum = solver.solve();
+
+        // the answer
+        double[] centroid = optimum.getPoint().toArray();
+
+        // error and geometry information; may throw SingularMatrixException depending the threshold argument provided
+        RealVector standardDeviation = optimum.getSigma(0);
+        RealMatrix covarianceMatrix = optimum.getCovariances(0);
+
+        return centroid;
     }
 
     public void addPoint(PositionPoint p,short index){

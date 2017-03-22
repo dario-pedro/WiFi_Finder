@@ -39,6 +39,10 @@ public class Coordinates {
             return c1.getX()==c2.getX() && c1.getY()==c2.getX();
         }
 
+        public double[] getDoubles(){
+            return new double[] { x,y };
+        }
+
         public float getX() {
             return x;
         }

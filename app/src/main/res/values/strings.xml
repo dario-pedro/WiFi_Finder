@@ -209,6 +209,7 @@
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_maps">Maps</string>
     <string name="notfound">N/A</string>
+    <string name="reset">Reset</string>
 
 
     <!-- settings end -->

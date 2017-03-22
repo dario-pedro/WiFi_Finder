@@ -18,15 +18,11 @@
 
 package com.vrem.wifianalyzer;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -44,9 +40,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.vrem.wifianalyzer.localization.MultilaterationFunction;
+import com.vrem.wifianalyzer.localization.NonLinearLeastSquaresSolver;
 import com.vrem.wifianalyzer.navigation.NavigationMenu;
 import com.vrem.wifianalyzer.navigation.NavigationMenuView;
-import com.vrem.wifianalyzer.odometry.Coordinates;
+
 import com.vrem.wifianalyzer.settings.Settings;
 import com.vrem.wifianalyzer.settings.ThemeStyle;
 import com.vrem.wifianalyzer.wifi.AccessPointView;
@@ -56,11 +54,13 @@ import com.vrem.wifianalyzer.wifi.band.WiFiChannel;
 import com.vrem.wifianalyzer.wifi.scanner.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer;
+import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.RealVector;
 
-import java.util.List;
 
 import static android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
-import static com.vrem.wifianalyzer.localization.TrilaterationSolver.solve;
 
 public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener, OnNavigationItemSelectedListener {
     private ThemeStyle currentThemeStyle;
@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
     protected void onCreate(Bundle savedInstanceState) {
         MainContext mainContext = MainContext.INSTANCE;
         mainContext.initialize(this, isLargeScreenLayout());
+
+
 
 
         Settings settings = mainContext.getSettings();

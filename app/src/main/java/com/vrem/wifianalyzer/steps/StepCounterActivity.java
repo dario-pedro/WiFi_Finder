@@ -207,24 +207,27 @@ public class StepCounterActivity extends Activity {
 
         distance_accel = 0.0;
         total_step_accel = 0;
-        velocity_accel = ((timer += tempTime) != 0 && distance_accel != 0.0) ? velocity_accel = distance_accel * 1000 / timer : 0.0;
+        velocity_accel = 0.0;
+                //((timer += tempTime) != 0 && distance_accel != 0.0) ? velocity_accel = distance_accel * 1000 / timer : 0.0;
         tv_distance_accel.setText(formatDouble(distance_accel));
         tv_velocity_accel.setText(formatDouble(velocity_accel));
-        tv_show_step_accel.setText(total_step_accel + "");
+        tv_show_step_accel.setText(""+total_step_accel);
 
         distance_detector = 0.0;
         total_step_detector = 0;
-        velocity_detector = ((timer += tempTime) != 0 && distance_detector != 0.0) ? velocity_detector = distance_detector * 1000 / timer : 0.0;
+        velocity_detector = 0.0;
+                //((timer += tempTime) != 0 && distance_detector != 0.0) ? velocity_detector = distance_detector * 1000 / timer : 0.0;
         tv_distance_detector.setText(formatDouble(distance_detector));
         tv_velocity_detector.setText(formatDouble(velocity_detector));
-        tv_show_step_detector.setText(total_step_detector + "");
+        tv_show_step_detector.setText(""+total_step_detector);
 
         distance_counter = 0.0;
         total_step_counter = 0;
-        velocity_counter = ((timer += tempTime) != 0 && distance_counter != 0.0) ? velocity_counter = distance_counter * 1000 / timer : 0.0;
+        velocity_counter = 0.0;
+                //((timer += tempTime) != 0 && distance_counter != 0.0) ? velocity_counter = distance_counter * 1000 / timer : 0.0;
         tv_distance_counter.setText(formatDouble(distance_counter));
         tv_velocity_counter.setText(formatDouble(velocity_counter));
-        tv_show_step_counter.setText(total_step_counter + "");
+        tv_show_step_counter.setText(""+total_step_counter);
 
     }
 
@@ -256,25 +259,28 @@ public class StepCounterActivity extends Activity {
         switch (sensor)
         {
             case R.string.sensor_accelarometer:
-                if (StepDetector.CURRENT_STEP % 2 == 0) {
+                distance_accel = StepAccel.CURRENT_STEP  * step_length * 0.01;
+                /*if (StepDetector.CURRENT_STEP % 2 == 0) {
                     distance_accel = (StepAccel.CURRENT_STEP / 2) * 3 * step_length * 0.01;
                 } else {
                     distance_accel = ((StepAccel.CURRENT_STEP / 2) * 3 + 1) * step_length * 0.01;
-                }
+                }*/
                 break;
             case R.string.sensor_step_detector:
-                if (StepDetector.CURRENT_STEP % 2 == 0) {
+                distance_detector = StepDetector.CURRENT_STEP * step_length * 0.01;
+                /*if (StepDetector.CURRENT_STEP % 2 == 0) {
                     distance_detector = (StepDetector.CURRENT_STEP / 2) * 3 * step_length * 0.01;
                 } else {
                     distance_detector = ((StepDetector.CURRENT_STEP / 2) * 3 + 1) * step_length * 0.01;
-                }
+                }*/
                 break;
             case R.string.sensor_step_counter:
-                if (StepDetector.CURRENT_STEP % 2 == 0) {
+                distance_counter = StepCounter.CURRENT_STEP * step_length * 0.01;
+                /*if (StepDetector.CURRENT_STEP % 2 == 0) {
                     distance_counter = (StepCounter.CURRENT_STEP / 2) * 3 * step_length * 0.01;
                 } else {
                     distance_counter = ((StepCounter.CURRENT_STEP / 2) * 3 + 1) * step_length * 0.01;
-                }
+                }*/
                 break;
         }
     }
