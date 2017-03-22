@@ -1,5 +1,6 @@
 package com.vrem.wifianalyzer.localization;
 
+import android.util.Log;
 import android.util.Pair;
 
 import com.vrem.wifianalyzer.MainContext;
@@ -93,6 +94,7 @@ public class PositionData {
 
         if (p != null) {
             points.addFirst(p);
+            MainContext.INSTANCE.addEstimative(p);
         }
 
         if(points.size() > 2) {
@@ -184,15 +186,21 @@ public class PositionData {
         double[][] positions = points.first;
         double[] distances = points.second;
 
-        NonLinearLeastSquaresSolver solver = new NonLinearLeastSquaresSolver(new MultilaterationFunction(positions, distances), new LevenbergMarquardtOptimizer());
-        LeastSquaresOptimizer.Optimum optimum = solver.solve();
 
-        // the answer
-        double[] centroid = optimum.getPoint().toArray();
+        double[] centroid = new double[0];
+        try {
+            NonLinearLeastSquaresSolver solver = new NonLinearLeastSquaresSolver(new MultilaterationFunction(positions, distances), new LevenbergMarquardtOptimizer());
+            LeastSquaresOptimizer.Optimum optimum = solver.solve();
 
-        // error and geometry information; may throw SingularMatrixException depending the threshold argument provided
-        RealVector standardDeviation = optimum.getSigma(0);
-        RealMatrix covarianceMatrix = optimum.getCovariances(0);
+            // the answer
+            centroid = optimum.getPoint().toArray();
+
+            // error and geometry information; may throw SingularMatrixException depending the threshold argument provided
+            RealVector standardDeviation = optimum.getSigma(0);
+            RealMatrix covarianceMatrix = optimum.getCovariances(0);
+        } catch (Exception e) {
+            Log.d("Multilateration",""+e);
+        }
 
         return centroid;
     }
