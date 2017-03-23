@@ -5,12 +5,14 @@ import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -79,42 +81,22 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
         tvEY = (TextView) view.findViewById(R.id.textView_estY_value);
 
         mOdom = new Odom();
-        /*mOdom_ACCELEROMETERCOMPASSPROVIDER = new Odom(Odom.ACCELEROMETERCOMPASSPROVIDER,Odom.ACCELEROMETER);
-        mOdom_IMPROVEDORIENTATIONSENSOR1PROVIDER = new Odom(Odom.IMPROVEDORIENTATIONSENSOR1PROVIDER,Odom.ACCELEROMETER);
-        mOdom_IMPROVEDORIENTATIONSENSOR2PROVIDER = new Odom(Odom.IMPROVEDORIENTATIONSENSOR2PROVIDER,Odom.ACCELEROMETER);
-        mOdom_ROTATIONVECTORPROVIDER = new Odom(Odom.ROTATIONVECTORPROVIDER,Odom.ACCELEROMETER);
-        mOdom_GRAVITYCOMPASSPROVIDER = new Odom(Odom.GRAVITYCOMPASSPROVIDER,Odom.ACCELEROMETER);
-        mOdom_CALIBRATEDGYROSCOPEPROVIDER = new Odom(Odom.CALIBRATEDGYROSCOPEPROVIDER,Odom.ACCELEROMETER);*/
 
         mHandler = new Handler();
 
-/*
-        Coordinates a = new Coordinates(0.5f,0.5f);
-        Coordinates b = new Coordinates(0.5f,-0.2f);
-        Coordinates c = new Coordinates(-0.3f,-0.2f);
-        Coordinates d = new Coordinates(-0.3f,0.5f);
 
-        double test_angle = getAngle(a,b);
-        test_angle=0;
-        test_angle = getAngle(a,b);
-        test_angle=0;
-        test_angle = getAngle(a,c);
-        test_angle=0;
-        test_angle = getAngle(a,d);
-        test_angle=0;
-        test_angle = getAngle(c,a);
-        test_angle=0;
-        test_angle = getAngle(c,b);
-        test_angle=0;
-        test_angle = getAngle(a,d);
-        test_angle=0;
-        test_angle = getAngle(b,d);
-        test_angle=0;
+        final Button button = (Button) view.findViewById(R.id.resetButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Snackbar snackbar = Snackbar
+                        .make(MainContext.INSTANCE.getMainActivity().getCurrentFocus(), "Reset Success", Snackbar.LENGTH_LONG);
 
-        test_angle = getAngle(d,b);
-        test_angle=0;*/
+                snackbar.show();
 
-        //refresh();
+                mOdom.resetCoords();
+            }
+        });
+
 
         return view;
     }
@@ -130,16 +112,6 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
         Coordinates curr_coords = new Coordinates(mOdom.getCoords());
 
-        //mOdom.saveCoords();
-
-        /*mOdom_ACCELEROMETERCOMPASSPROVIDER.saveCoords();
-        mOdom_IMPROVEDORIENTATIONSENSOR1PROVIDER.saveCoords();
-        mOdom_IMPROVEDORIENTATIONSENSOR2PROVIDER.saveCoords();
-        mOdom_ROTATIONVECTORPROVIDER.saveCoords();
-        mOdom_GRAVITYCOMPASSPROVIDER.saveCoords();
-        mOdom_CALIBRATEDGYROSCOPEPROVIDER.saveCoords();*/
-
-
         positionData.addPoint(new PositionPoint(curr_coords,wiFiDetails));
 
         //TODO CHANGE THE ARROW MOVEMENT, ACCORDING TO ESTIMATIION
@@ -151,14 +123,14 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
 
 
-        if(positionData.positionEstimated)
+        if(positionData.isPositionEstimated())
             degree = (int) -(getAngle(current_coords,positionData.getTargetPosition()) + offset_deegree);
 
-        //arrowView.animate().rotation(degree).start();
+
 
         mHandler.post(new Runnable(){
             public void run() {
-                if(positionData.positionEstimated) {
+                if(positionData.isPositionEstimated()) {
                     tvEX.setText("" + formatDouble(positionData.getTargetPosition().getX()));
                     tvEY.setText("" + formatDouble(positionData.getTargetPosition().getY()));
                 }

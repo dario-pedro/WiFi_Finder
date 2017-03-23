@@ -47,7 +47,7 @@ public class PositionData {
      */
     private char mMode = MULTILATERATION;
 
-    public boolean positionEstimated;
+    private boolean positionEstimated;
 
     private Coordinates estimatedTargetPosition;
     private Deque<PositionPoint> points;
@@ -205,7 +205,15 @@ public class PositionData {
         return centroid;
     }
 
-    public void addPoint(PositionPoint p,short index){
+    public boolean isPositionEstimated() {
+        return positionEstimated;
+    }
+
+    public void setPositionEstimated(boolean positionEstimated) {
+        this.positionEstimated = positionEstimated;
+    }
+
+    public void addPoint(PositionPoint p, short index){
 
         while (points.size() >= MAX_POINTS_STORAGE) {
             points.pollLast();

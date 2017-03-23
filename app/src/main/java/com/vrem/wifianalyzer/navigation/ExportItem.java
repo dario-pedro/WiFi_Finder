@@ -53,10 +53,10 @@ class ExportItem implements NavigationMenuItem {
         String data = "";//getWifiData(wiFiDetails);
 
 
-        /*if(!estimatives.isEmpty()) {
+        if(!estimatives.isEmpty()) {
             data += "\n";
             data += getCoordsData(estimatives);
-        }*/
+        }
 
         if(!allPoints.isEmpty()) {
             data += "\n";
@@ -111,7 +111,7 @@ class ExportItem implements NavigationMenuItem {
     String getCoordsData(@NonNull List<PositionPoint> coordinates) {
         StringBuilder result = new StringBuilder();
         result.append("Coordinates Information:\n");
-        result.append("(x,y) in meters\n\n");
+        result.append("(x,y) and distance in meters\n\n");
 
         int i = 1;
 
@@ -119,13 +119,13 @@ class ExportItem implements NavigationMenuItem {
 
 
 
-            if(i%4 != 0)
-                result.append(String.format(Locale.ENGLISH, "%d. (%.2f,%.2f) distance = %.2f\n",
+          //  if(i%4 != 0)
+                result.append(String.format(Locale.ENGLISH, "%d. ,%.5f,%.5f ,%.5f\n",
                         i,positionPoint.getPosition().getX()/100,positionPoint.getPosition().getY()/100,
                         positionPoint.getDistance()/100));
-            else
+            /*else
                 result.append(String.format(Locale.ENGLISH, "estimative. (%.2f,%.2f)\n",
-                        positionPoint.getPosition().getX()/100,positionPoint.getPosition().getY()/100));
+                        positionPoint.getPosition().getX()/100,positionPoint.getPosition().getY()/100));*/
 
             ++i;
         }
