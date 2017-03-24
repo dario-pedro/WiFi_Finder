@@ -77,7 +77,7 @@ public class PositionData {
         this.estimatedTargetPosition = new Coordinates();
         this.positionEstimated = false;
         this.points = new ArrayDeque<>();
-        highestValues = new PositionPoint[NUMBER_OF_STORED_MAX];
+        this.highestValues = new PositionPoint[NUMBER_OF_STORED_MAX];
 
         for (int i = NUMBER_OF_STORED_MAX-1 ; i >= 0  ; i--)
         {
@@ -375,6 +375,8 @@ public class PositionData {
     }
 
 
-
+    public void resetCoords() {
+        init();
+    }
 
 }

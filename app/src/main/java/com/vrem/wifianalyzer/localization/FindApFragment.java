@@ -1,7 +1,6 @@
 
 package com.vrem.wifianalyzer.localization;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -29,46 +28,37 @@ import com.vrem.wifianalyzer.wifi.scanner.UpdateNotifier;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class FindApFragment extends Fragment  implements UpdateNotifier {
 
     private SwipeRefreshLayout swipeRefreshLayout;
-    private PositionData positionData;
+
+    private PositionData mPositionData;
+    private Odom mOdom;
 
     private TextView tvX;
     private TextView tvY;
     private TextView tvEX;
     private TextView tvEY;
     private ImageView arrowView;
+    private volatile int degree = 0;
 
     private List<WiFiDetail> wiFiDetails = new ArrayList<>();
 
-    private Odom mOdom;
 
-    private Odom mOdom_ACCELEROMETERCOMPASSPROVIDER;
-    private Odom mOdom_IMPROVEDORIENTATIONSENSOR1PROVIDER;
-    private Odom mOdom_IMPROVEDORIENTATIONSENSOR2PROVIDER;
-    private Odom mOdom_ROTATIONVECTORPROVIDER;
-    private Odom mOdom_GRAVITYCOMPASSPROVIDER;
-    private Odom mOdom_CALIBRATEDGYROSCOPEPROVIDER;
 
     private Handler mHandler;
-
-    private boolean mKeepRunningUI;
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentActivity activity = getActivity();
 
         View view = inflater.inflate(R.layout.findap_content, container, false);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.odomRefresh);
         swipeRefreshLayout.setOnRefreshListener(new ListViewOnRefreshListener());
 
-        positionData = new PositionData();
+        mPositionData = new PositionData();
 
         Scanner scanner = MainContext.INSTANCE.getScanner();
         scanner.register(this);
@@ -93,7 +83,7 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
                 snackbar.show();
 
-                mOdom.resetCoords();
+                findApReset();
             }
         });
 
@@ -104,7 +94,7 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
 
 
-    private int degree = 0;
+
 
     public void update(WiFiData wiFiData){
         Settings settings = MainContext.INSTANCE.getSettings();
@@ -112,7 +102,7 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
         Coordinates curr_coords = new Coordinates(mOdom.getCoords());
 
-        positionData.addPoint(new PositionPoint(curr_coords,wiFiDetails));
+        mPositionData.addPoint(new PositionPoint(curr_coords,wiFiDetails));
 
         //TODO CHANGE THE ARROW MOVEMENT, ACCORDING TO ESTIMATIION
         int offset_deegree = (int) - Math.toDegrees(mOdom.getAngle());
@@ -123,8 +113,8 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
 
 
-        if(positionData.isPositionEstimated())
-            degree = (int) -(getAngle(current_coords,positionData.getTargetPosition()) + offset_deegree);
+        if(mPositionData.isPositionEstimated())
+            degree = (int) -(getAngle(current_coords, mPositionData.getTargetPosition()) + offset_deegree);
 
         arrowView.animate().rotation(degree).start();
 
@@ -132,9 +122,9 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
         mHandler.post(new Runnable(){
             public void run() {
-                if(positionData.isPositionEstimated()) {
-                    tvEX.setText("" + formatDouble(positionData.getTargetPosition().getX()));
-                    tvEY.setText("" + formatDouble(positionData.getTargetPosition().getY()));
+                if(mPositionData.isPositionEstimated()) {
+                    tvEX.setText("" + formatDouble(mPositionData.getTargetPosition().getX()));
+                    tvEY.setText("" + formatDouble(mPositionData.getTargetPosition().getY()));
                 }
 
                 tvX.setText(""+formatDouble(current_coords.getX()));
@@ -172,6 +162,13 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
         String distanceStr = format.format(val);
         return distanceStr.equals(getString(R.string.zero)) ? getString(R.string.double_zero)
                 : distanceStr;
+    }
+
+    private void findApReset()
+    {
+        mOdom.resetCoords();
+        mPositionData.resetCoords();
+        degree = 0;
     }
 
 
