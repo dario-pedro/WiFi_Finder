@@ -125,37 +125,6 @@ public class PositionData {
 
     }
 
-    private void estimateTrilateration(PositionPoint p) {
-        boolean require_recalculate_estimation = false;
-
-
-        if(replace_coordinates(p))
-        {
-            require_recalculate_estimation = positionEstimated;
-        }
-        else{
-            require_recalculate_estimation = addNewPoint(positionEstimated,p);
-        }
-
-
-
-        if(require_recalculate_estimation)
-        {
-            estimatedTargetPosition = solve(highestValues[0].getPosition(),
-                    highestValues[1].getPosition(),
-                    highestValues[2].getPosition(),
-                    highestValues[0].getDistance(),
-                    highestValues[1].getDistance(),
-                    highestValues[2].getDistance());
-
-            MainContext.INSTANCE.addEstimative(highestValues[0]);
-            MainContext.INSTANCE.addEstimative(highestValues[1]);
-            MainContext.INSTANCE.addEstimative(highestValues[2]);
-            MainContext.INSTANCE.addEstimative(new PositionPoint(estimatedTargetPosition,null));
-        }
-    }
-
-
     private Pair<double[][],double[]> getDoublePoints(){
 
 
@@ -195,6 +164,9 @@ public class PositionData {
             // the answer
             centroid = optimum.getPoint().toArray();
 
+            estimatedTargetPosition.setX((float) centroid[0]);
+            estimatedTargetPosition.setY((float) centroid[1]);
+
             // error and geometry information; may throw SingularMatrixException depending the threshold argument provided
             RealVector standardDeviation = optimum.getSigma(0);
             RealMatrix covarianceMatrix = optimum.getCovariances(0);
@@ -204,6 +176,39 @@ public class PositionData {
 
         return centroid;
     }
+
+
+    private void estimateTrilateration(PositionPoint p) {
+        boolean require_recalculate_estimation = false;
+
+
+        if(replace_coordinates(p))
+        {
+            require_recalculate_estimation = positionEstimated;
+        }
+        else{
+            require_recalculate_estimation = addNewPoint(positionEstimated,p);
+        }
+
+
+
+        if(require_recalculate_estimation)
+        {
+            estimatedTargetPosition = solve(highestValues[0].getPosition(),
+                    highestValues[1].getPosition(),
+                    highestValues[2].getPosition(),
+                    highestValues[0].getDistance(),
+                    highestValues[1].getDistance(),
+                    highestValues[2].getDistance());
+
+            MainContext.INSTANCE.addEstimative(highestValues[0]);
+            MainContext.INSTANCE.addEstimative(highestValues[1]);
+            MainContext.INSTANCE.addEstimative(highestValues[2]);
+            MainContext.INSTANCE.addEstimative(new PositionPoint(estimatedTargetPosition,null));
+        }
+    }
+
+
 
     public boolean isPositionEstimated() {
         return positionEstimated;
@@ -265,17 +270,6 @@ public class PositionData {
         return estimatedTargetPosition;
     }
 
-
-
-
-
-    private void calculateEstimative()
-    {
-        if(!positionEstimated)
-            return;
-
-
-    }
 
 
     private boolean  addNewPoint(boolean positionEstimated, PositionPoint p){

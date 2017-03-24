@@ -116,7 +116,7 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
         //TODO CHANGE THE ARROW MOVEMENT, ACCORDING TO ESTIMATIION
         int offset_deegree = (int) - Math.toDegrees(mOdom.getAngle());
-        arrowView.animate().rotation(offset_deegree).start();
+
 
         final Coordinates current_coords = mOdom.getCoords();
 
@@ -125,6 +125,8 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
         if(positionData.isPositionEstimated())
             degree = (int) -(getAngle(current_coords,positionData.getTargetPosition()) + offset_deegree);
+
+        arrowView.animate().rotation(degree).start();
 
 
 
