@@ -200,6 +200,8 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
     @Override
     public void onDestroy() {
         //ui_update = null;
+        Scanner scanner = MainContext.INSTANCE.getScanner();
+        scanner.unregister(this);
         super.onDestroy();
     }
 }

@@ -65,12 +65,7 @@ public class OdometryFragment extends Fragment {
             public void run() {
                 mKeepRunningUI = true;
                 while (mKeepRunningUI) {
-                    try {
-                        Thread.sleep(150);
-                    }
-                    catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+
 
                     mHandler.post(new Runnable(){
                         public void run() {
@@ -80,6 +75,13 @@ public class OdometryFragment extends Fragment {
                             tvY.setText(""+formatDouble(c.getY()));
                         }
                     });
+
+                    try {
+                        Thread.sleep(150);
+                    }
+                    catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         };
