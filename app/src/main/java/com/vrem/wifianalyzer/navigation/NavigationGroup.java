@@ -25,6 +25,7 @@ public enum NavigationGroup {
     GROUP_WIFI(NavigationMenu.ACCESS_POINTS, NavigationMenu.CHANNEL_RATING, NavigationMenu.CHANNEL_GRAPH, NavigationMenu.TIME_GRAPH),
     GROUP_ODOM(NavigationMenu.GOOGLE_MAPS,NavigationMenu.FIND_AP,NavigationMenu.ODOMETRY,
             NavigationMenu.SENSOR_FUSION,NavigationMenu.STEP_COUNTER),
+    GROUP_COOP(NavigationMenu.CHAT),
     GROUP_OTHER(NavigationMenu.CHANNEL_AVAILABLE, NavigationMenu.VENDOR_LIST),
     GROUP_SETTINGS(NavigationMenu.EXPORT,NavigationMenu.SENDDB,NavigationMenu.SETTINGS,NavigationMenu.ACCESS_POINTS.CONTACTS);
 

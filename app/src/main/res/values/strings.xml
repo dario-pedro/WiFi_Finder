@@ -210,6 +210,8 @@
     <string name="title_activity_maps">Maps</string>
     <string name="notfound">N/A</string>
     <string name="reset">Reset</string>
+    <string name="chat_message">chat_message</string>
+    <string name="action_chat">Multicast Chat</string>
 
 
     <!-- settings end -->

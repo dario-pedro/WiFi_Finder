@@ -11,6 +11,7 @@ import com.vrem.wifianalyzer.R;
 import com.vrem.wifianalyzer.contacts.ContactsFragment;
 //import com.vrem.wifianalyzer.maps.MapsActivity;
 import com.vrem.wifianalyzer.maps.MapsActivity;
+import com.vrem.wifianalyzer.multicast.MulticastFragment;
 import com.vrem.wifianalyzer.odometry.OdometryFragment;
 import com.vrem.wifianalyzer.sensor_fusion.SensorSelectionActivity;
 import com.vrem.wifianalyzer.settings.SettingActivity;
@@ -22,10 +23,13 @@ import com.vrem.wifianalyzer.wifi.ChannelRatingFragment;
 import com.vrem.wifianalyzer.wifi.graph.channel.ChannelGraphFragment;
 import com.vrem.wifianalyzer.wifi.graph.time.TimeGraphFragment;
 
+
+
 //import static com.vrem.wifianalyzer.R.drawable.cast_ic_expanded_controller_play;
 
 public enum NavigationMenu {
     LOGIN(R.drawable.ic_settings_grey_500_48dp, R.string.action_login, new ActivityItem(LoginActivity.class)),
+
 
 
     ACCESS_POINTS(R.drawable.ic_network_wifi_grey_500_48dp, R.string.action_access_points, true, new FragmentItem(new AccessPointsFragment())),
@@ -39,6 +43,8 @@ public enum NavigationMenu {
     ODOMETRY(R.drawable.ic_transfer_within_a_station_black_24dp, R.string.action_odometry, new FragmentItem(new OdometryFragment())),
     SENSOR_FUSION(R.drawable.ic_developer_mode_black_24dp, R.string.action_sensorf, new ActivityItem(SensorSelectionActivity.class)),
     STEP_COUNTER(R.drawable.ic_directions_run_black_24dp, R.string.action_step_counter, new ActivityItem(StepCounterActivity.class)),
+
+    CHAT(R.drawable.ic_library_books_black_24dp, R.string.action_chat, new FragmentItem(new MulticastFragment())),
 
 
     CHANNEL_AVAILABLE(R.drawable.ic_location_on_grey_500_48dp, R.string.action_channel_available, new FragmentItem(new ChannelAvailableFragment())),
