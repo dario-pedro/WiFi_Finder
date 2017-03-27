@@ -18,6 +18,7 @@
 
 package com.vrem.wifianalyzer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -26,6 +27,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.multidex.MultiDex;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
@@ -69,6 +71,17 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
     private NavigationMenu startNavigationMenu;
     private String currentCountryCode;
     private ConnectionView connectionView;
+
+
+    /**
+     * Use this to enable installing the App in multiple devices
+     * @param context
+     */
+    @Override
+    protected void attachBaseContext(Context context) {
+        super.attachBaseContext(context);
+        MultiDex.install(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

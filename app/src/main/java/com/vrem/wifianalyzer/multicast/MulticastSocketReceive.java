@@ -70,6 +70,8 @@ public class MulticastSocketReceive extends Thread {
                 String msg = new String(buf, 0, buf.length);
                 Log.d("Chat","Received: " + msg);
                 root.receiveMessage(msg);
+                // reset buffer
+                buf = new byte[4096];
             }
         } catch (IOException e) {
             e.printStackTrace();

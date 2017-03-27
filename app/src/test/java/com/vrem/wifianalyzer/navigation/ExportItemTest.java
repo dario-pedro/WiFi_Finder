@@ -103,7 +103,7 @@ public class ExportItemTest {
     public void testActivate() throws Exception {
         // setup
         WiFiData wiFiData = withWiFiData();
-        String sendData = fixture.getData(wiFiData.getWiFiDetails());
+        String sendData = fixture.getWifiData(wiFiData.getWiFiDetails());
         when(scanner.getWiFiData()).thenReturn(wiFiData);
         withResources();
         withResolveActivity();
@@ -125,7 +125,7 @@ public class ExportItemTest {
             "SSID|BSSID|Strength|Primary Channel|Primary Frequency|Center Channel|Center Frequency|Width (Range)|Distance|Security\n"
                 + "SSID|BSSID|-40dBm|1|2412MHz|3|2422MHz|40MHz (2402 - 2442)|1.0m|capabilities\n";
         // execute
-        String actual = fixture.getData(wiFiData.getWiFiDetails());
+        String actual = fixture.getWifiData(wiFiData.getWiFiDetails());
         // validate
         assertEquals(expected, actual);
     }

@@ -26,7 +26,8 @@ android {
     defaultConfig {
         applicationId "com.vrem.wifianalyzer"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 16
+        multiDexEnabled true
         versionCode
         versionName
     }
@@ -91,6 +92,8 @@ dependencies {
     compile 'com.estimote:sdk:0.9.1'
     //Chat
     compile 'me.himanshusoni.chatmessageview:chat-message-view:1.0.7'
+    //to enable multidex
+    compile 'com.android.support:multidex:1.0.1'
     // Unit Test Dependencies
     testCompile 'junit:junit:4.12'
     testCompile 'org.powermock:powermock-module-junit4:1.6.6'
