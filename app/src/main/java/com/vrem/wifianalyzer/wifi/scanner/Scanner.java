@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 
 import com.vrem.wifianalyzer.settings.Settings;
+import com.vrem.wifianalyzer.wifi.HotSpotManager;
 import com.vrem.wifianalyzer.wifi.model.WiFiData;
 
 import java.util.ArrayList;
@@ -56,6 +57,10 @@ public class Scanner {
     }
 
     private void performWiFiScan() {
+
+        if(HotSpotManager.hotSpotEnable)
+            return;
+
         List<ScanResult> scanResults = new ArrayList<>();
         WifiInfo wifiInfo = null;
         List<WifiConfiguration> configuredNetworks = null;

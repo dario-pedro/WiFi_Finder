@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="15">
+        android:weightSum="21">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -189,13 +189,39 @@
                         android:gravity="center|top" />
                 </LinearLayout>
             </LinearLayout>
-        <Button
-            android:layout_weight="5"
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="79dp"
-            android:id="@+id/resetButton"
-            android:text="@string/reset" />
+            android:layout_height="match_parent"
+            android:weightSum="2"
+            android:layout_weight="6" >
+
+            <Button
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:id="@+id/resetButton"
+                android:text="@string/reset" />
+
+            <Button
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:id="@+id/swapButton"
+                android:text="@string/swap" />
+
+
+
+
+
+
         </LinearLayout>
+
+
+    </LinearLayout>
+
+
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

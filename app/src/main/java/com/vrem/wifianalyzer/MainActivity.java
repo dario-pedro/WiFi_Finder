@@ -77,11 +77,11 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
      * Use this to enable installing the App in multiple devices
      * @param context
      */
-    @Override
+    /*@Override
     protected void attachBaseContext(Context context) {
         super.attachBaseContext(context);
         MultiDex.install(this);
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

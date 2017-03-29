@@ -20,6 +20,7 @@ import com.vrem.wifianalyzer.R;
 import com.vrem.wifianalyzer.odometry.Coordinates;
 import com.vrem.wifianalyzer.odometry.Odom;
 import com.vrem.wifianalyzer.settings.Settings;
+import com.vrem.wifianalyzer.wifi.HotSpotManager;
 import com.vrem.wifianalyzer.wifi.model.WiFiData;
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail;
 import com.vrem.wifianalyzer.wifi.scanner.Scanner;
@@ -75,8 +76,8 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
         mHandler = new Handler();
 
 
-        final Button button = (Button) view.findViewById(R.id.resetButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        final Button button_reset = (Button) view.findViewById(R.id.resetButton);
+        button_reset.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Snackbar snackbar = Snackbar
                         .make(MainContext.INSTANCE.getMainActivity().getCurrentFocus(), "Reset Success", Snackbar.LENGTH_LONG);
@@ -84,6 +85,23 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
                 snackbar.show();
 
                 findApReset();
+            }
+        });
+
+        final Button button_swap = (Button) view.findViewById(R.id.swapButton);
+        button_swap.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                String s = "Swaping to ";
+                s+= HotSpotManager.hotSpotEnable ? "WiFi" : "HotSpot";
+
+
+                Snackbar snackbar = Snackbar
+                        .make(MainContext.INSTANCE.getMainActivity().getCurrentFocus(), s, Snackbar.LENGTH_LONG);
+
+                snackbar.show();
+
+                HotSpotManager.turnOnOffHotspot(MainContext.INSTANCE.getMainActivity(),!HotSpotManager.hotSpotEnable);
             }
         });
 

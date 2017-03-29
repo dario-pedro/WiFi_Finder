@@ -18,9 +18,11 @@
 
 package com.vrem.wifianalyzer.navigation;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -28,6 +30,7 @@ import com.vrem.wifianalyzer.MainActivity;
 import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
 import com.vrem.wifianalyzer.localization.PositionPoint;
+import com.vrem.wifianalyzer.wifi.HotSpotManager;
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail;
 import com.vrem.wifianalyzer.wifi.model.WiFiSignal;
 
@@ -38,26 +41,23 @@ class SendDBItem implements NavigationMenuItem {
 
     @Override
     public void activate(@NonNull MainActivity mainActivity, @NonNull MenuItem menuItem, @NonNull NavigationMenu navigationMenu) {
+
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(mainActivity,
+                Manifest.permission.WRITE_SETTINGS)){
+
+        }else {
+            ActivityCompat.requestPermissions(mainActivity,
+                    new String[]{Manifest.permission.WRITE_SETTINGS},
+                    121);
+        }
+
+
+
         String title = getTitle(mainActivity);
-        List<WiFiDetail> wiFiDetails = getWiFiDetails();
-        List<PositionPoint> estimatives = getCoordsDetails();
-        //List<PositionPoint> allPoints = getPositionPointsDetails();
-        if (!dataAvailable(wiFiDetails)) {
-            Toast.makeText(mainActivity, R.string.no_data, Toast.LENGTH_LONG).show();
-            return;
-        }
-        String data = getWifiData(wiFiDetails);
 
 
-        if(!estimatives.isEmpty()) {
-            data += "\n";
-            data += getCoordsData(estimatives);
-        }
-
-        /*if(!allPoints.isEmpty()) {
-            data += "\n";
-            data += getPositionPointsData(allPoints);
-        }*/
+        String data = "test";
 
         Intent intent = createIntent(title, data);
         Intent chooser = createChooserIntent(intent, title);
