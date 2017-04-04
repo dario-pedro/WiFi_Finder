@@ -45,8 +45,16 @@ public enum MainContext {
     private Configuration configuration;
     private List<PositionPoint> mEstimativesList;
     private List<List<PositionPoint>> mAllPointsList;
+    private List<Double> mTests;
 
 
+    public List<Double> getmTests() {
+        return mTests;
+    }
+
+    public void setmTests(List<Double> mTests) {
+        this.mTests = mTests;
+    }
 
     public List<PositionPoint> getmEstimativesList() {
         return mEstimativesList;
@@ -67,6 +75,11 @@ public enum MainContext {
     public void addEstimative(PositionPoint positionPoint)
     {
         mEstimativesList.add(positionPoint);
+    }
+
+    public void addDoubleTest(Double d)
+    {
+        mTests.add(d);
     }
 
     public void addPositionPoint(PositionPoint positionPoint,short index)
@@ -131,6 +144,8 @@ public enum MainContext {
         mEstimativesList = new ArrayList<PositionPoint>();
 
         mAllPointsList = new ArrayList<List<PositionPoint>>();
+
+        mTests = new ArrayList<Double>();
 
         /**
          * Initialize the 5 lists to be debugged

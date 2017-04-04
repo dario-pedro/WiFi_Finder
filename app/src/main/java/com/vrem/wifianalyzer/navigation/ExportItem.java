@@ -42,10 +42,14 @@ class ExportItem implements NavigationMenuItem {
 
     @Override
     public void activate(@NonNull MainActivity mainActivity, @NonNull MenuItem menuItem, @NonNull NavigationMenu navigationMenu) {
+
         String title = getTitle(mainActivity);
         List<WiFiDetail> wiFiDetails = getWiFiDetails();
         List<PositionPoint> estimatives = getCoordsDetails();
         List<List<PositionPoint>> allPoints = getPositionPointsDetails();
+        //List<Double> accellTests = getDoubleTests();
+
+
         if (!dataAvailable(wiFiDetails)) {
             Toast.makeText(mainActivity, R.string.no_data, Toast.LENGTH_LONG).show();
             return;
@@ -53,15 +57,23 @@ class ExportItem implements NavigationMenuItem {
         String data = "";//getWifiData(wiFiDetails);
 
 
-        if(!estimatives.isEmpty()) {
+        if(!estimatives.isEmpty())
+        {
             data += "\n";
             data += getCoordsData(estimatives);
         }
 
-        if(!allPoints.isEmpty()) {
+        if(!allPoints.isEmpty())
+        {
             data += "\n";
             data += getPositionPointsData(allPoints);
         }
+
+        /*if(!accellTests.isEmpty())
+        {
+            data += "\n";
+            data += getDoublesData(accellTests);
+        }*/
 
         Intent intent = createIntent(title, data);
         Intent chooser = createChooserIntent(intent, title);
@@ -103,6 +115,37 @@ class ExportItem implements NavigationMenuItem {
                     wiFiSignal.getFrequencyEnd(),
                     wiFiSignal.getDistance(),
                     wiFiDetail.getCapabilities()));
+        }
+        return result.toString();
+    }
+
+    String getDoublesData(@NonNull List<Double> doubles) {
+        StringBuilder result = new StringBuilder();
+        result.append("Accelarometer Information:\n");
+        result.append("(x,y,z) \n\n");
+
+        int i = 1;
+
+        double[] events = {0d,0d,0d};
+
+        for (Double d : doubles) {
+
+              int index = i%3;
+
+              if(index == 0) {
+                  events[index+2] = d;
+                  result.append(String.format(Locale.ENGLISH, "%d. ,%.5f,%.5f,%.5f\n",
+                          i/3, events[0], events[1],events[2]));
+              }else {
+                  events[index - 1] = d;
+              }
+
+
+            /*else
+                result.append(String.format(Locale.ENGLISH, "estimative. (%.2f,%.2f)\n",
+                        positionPoint.getPosition().getX()/100,positionPoint.getPosition().getY()/100));*/
+
+            ++i;
         }
         return result.toString();
     }
@@ -190,6 +233,10 @@ class ExportItem implements NavigationMenuItem {
 
     private List<PositionPoint> getCoordsDetails() {
         return MainContext.INSTANCE.getmEstimativesList();
+    }
+
+    private List<Double> getDoubleTests() {
+        return MainContext.INSTANCE.getmTests();
     }
 
     private List<List<PositionPoint>> getPositionPointsDetails() {

@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.odometry.OdomInterface;
 import com.vrem.wifianalyzer.odometry.OdometryFragment;
 
@@ -63,6 +64,11 @@ public class StepAccel implements SensorEventListener {
 		// Log.i(Constant.STEP_SERVER, "StepDetector");
 		Sensor sensor = event.sensor;
 		// Log.i(Constant.STEP_DETECTOR, "onSensorChanged");
+
+		/*MainContext.INSTANCE.addDoubleTest((double) event.values[0]);
+		MainContext.INSTANCE.addDoubleTest((double) event.values[1]);
+		MainContext.INSTANCE.addDoubleTest((double) event.values[2]);*/
+
 		synchronized (this) {
 			 if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 				float vSum = 0;
