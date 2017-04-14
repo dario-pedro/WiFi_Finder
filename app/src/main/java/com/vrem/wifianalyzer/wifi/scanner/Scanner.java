@@ -25,6 +25,7 @@ import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 
+import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.settings.Settings;
 import com.vrem.wifianalyzer.wifi.HotSpotManager;
 import com.vrem.wifianalyzer.wifi.model.WiFiData;
@@ -76,6 +77,7 @@ public class Scanner {
         } catch (Exception e) {
             // critical error: set to no results and do not die
         }
+        MainContext.INSTANCE.addDoubleTest((double)scanResults.get(0).level);
         cache.add(scanResults);
         wiFiData = transformer.transformToWiFiData(cache.getScanResults(), wifiInfo, configuredNetworks);
     }

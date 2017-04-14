@@ -33,6 +33,8 @@ import com.vrem.wifianalyzer.odometry.Odom;
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail;
 import com.vrem.wifianalyzer.wifi.model.WiFiSignal;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,14 +49,14 @@ class ExportItem implements NavigationMenuItem {
         List<WiFiDetail> wiFiDetails = getWiFiDetails();
         List<PositionPoint> estimatives = getCoordsDetails();
         List<List<PositionPoint>> allPoints = getPositionPointsDetails();
-        //List<Double> accellTests = getDoubleTests();
+        List<Double> dTests = getDoubleTests();
 
 
         if (!dataAvailable(wiFiDetails)) {
             Toast.makeText(mainActivity, R.string.no_data, Toast.LENGTH_LONG).show();
             return;
         }
-        String data = "";//getWifiData(wiFiDetails);
+        String data = getWifiData(wiFiDetails);
 
 
         if(!estimatives.isEmpty())
@@ -69,11 +71,11 @@ class ExportItem implements NavigationMenuItem {
             data += getPositionPointsData(allPoints);
         }
 
-        /*if(!accellTests.isEmpty())
+        if(!dTests.isEmpty())
         {
             data += "\n";
-            data += getDoublesData(accellTests);
-        }*/
+            data += getDoublesData(dTests);
+        }
 
         Intent intent = createIntent(title, data);
         Intent chooser = createChooserIntent(intent, title);
@@ -119,6 +121,8 @@ class ExportItem implements NavigationMenuItem {
         return result.toString();
     }
 
+
+
     String getDoublesData(@NonNull List<Double> doubles) {
         StringBuilder result = new StringBuilder();
         result.append("Accelarometer Information:\n");
@@ -130,7 +134,11 @@ class ExportItem implements NavigationMenuItem {
 
         for (Double d : doubles) {
 
-              int index = i%3;
+            result.append(String.format(Locale.ENGLISH, "%d ,%.0f\n",
+                    i, d));
+
+
+              /*int index = i%3;
 
               if(index == 0) {
                   events[index+2] = d;
@@ -138,7 +146,7 @@ class ExportItem implements NavigationMenuItem {
                           i/3, events[0], events[1],events[2]));
               }else {
                   events[index - 1] = d;
-              }
+              }*/
 
 
             /*else
@@ -154,23 +162,28 @@ class ExportItem implements NavigationMenuItem {
     String getCoordsData(@NonNull List<PositionPoint> coordinates) {
         StringBuilder result = new StringBuilder();
         result.append("Coordinates Information:\n");
-        result.append("(x,y) and distance in meters\n\n");
+        result.append("Date,x,y,distance,PrimaryFrequency,power,ESTx,ESTy\n");
 
-        int i = 1;
+
 
         for (PositionPoint positionPoint : coordinates) {
 
+            String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(positionPoint.getStore_time());
+
+            WiFiSignal ws = positionPoint.getInfo().get(0).getWiFiSignal();
+
+                result.append(String.format(Locale.ENGLISH, "%s,%.5f,%.5f,%.5f,%d,%d,%.5f,%.5f\n",
+                        date,
+                        positionPoint.getPosition().getX()/100,
+                        positionPoint.getPosition().getY()/100,
+                        positionPoint.getDistance()/100,
+                        ws.getPrimaryFrequency(),
+                        ws.getLevel(),
+                        positionPoint.getAPestimation().getX()/100,
+                        positionPoint.getAPestimation().getY()/100
+                ));
 
 
-          //  if(i%4 != 0)
-                result.append(String.format(Locale.ENGLISH, "%d. ,%.5f,%.5f ,%.5f\n",
-                        i,positionPoint.getPosition().getX()/100,positionPoint.getPosition().getY()/100,
-                        positionPoint.getDistance()/100));
-            /*else
-                result.append(String.format(Locale.ENGLISH, "estimative. (%.2f,%.2f)\n",
-                        positionPoint.getPosition().getX()/100,positionPoint.getPosition().getY()/100));*/
-
-            ++i;
         }
         return result.toString();
     }

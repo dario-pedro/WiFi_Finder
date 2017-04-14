@@ -16,7 +16,13 @@ public class PositionPoint implements Cloneable {
 
 
     private Coordinates position;
+
+
+
+    private Coordinates APestimation ;
     private List<WiFiDetail> info;
+
+
 
     private static final double m_to_cm = 100.0;
 
@@ -30,8 +36,7 @@ public class PositionPoint implements Cloneable {
 
         this.store_time = new Date();
 
-
-
+        this.APestimation = new Coordinates();
 
         this.distance = (info != null && info.size() > -1) ?
             info.get(0).getWiFiSignal().getDistance()*m_to_cm : Double.MAX_VALUE;
@@ -81,5 +86,17 @@ public class PositionPoint implements Cloneable {
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public Date getStore_time() {
+        return store_time;
+    }
+
+    public Coordinates getAPestimation() {
+        return APestimation;
+    }
+
+    public void setAPestimation(Coordinates APestimation) {
+        this.APestimation = APestimation;
     }
 }
