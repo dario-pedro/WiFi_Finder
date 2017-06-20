@@ -1,11 +1,15 @@
 package com.vrem.wifianalyzer.localization;
 
+import android.util.Log;
+
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresFactory;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresProblem;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.DiagonalMatrix;
+
+import java.util.Date;
 
 /**
  * Solves a Multilateration problem with an instance of a
@@ -49,10 +53,10 @@ public class NonLinearLeastSquaresSolver {
 	public Optimum solve(boolean debugInfo) {
 		int numberOfPositions = mFunction.getPositions().length;
 		int positionDimension = mFunction.getPositions()[0].length;
-
+		Date start_time = new Date();
 		double[] initialPoint = new double[positionDimension];
 		// initial point, use average of the vertices
-		for (int i = 0; i < mFunction.getPositions().length; i++) {
+		for (int i = 0; i < numberOfPositions; i++) {
 			double[] vertex = mFunction.getPositions()[i];
 			for (int j = 0; j < vertex.length; j++) {
 				initialPoint[j] += vertex[j];
@@ -61,6 +65,8 @@ public class NonLinearLeastSquaresSolver {
 		for (int j = 0; j < initialPoint.length; j++) {
 			initialPoint[j] /= numberOfPositions;
 		}
+
+		Log.d("Media"," "+(new Date().getTime() - start_time.getTime()));
 
 		if (debugInfo) {
 			StringBuilder output = new StringBuilder("initialPoint: ");

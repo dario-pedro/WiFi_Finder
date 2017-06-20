@@ -50,8 +50,8 @@ public class Odom implements OdomInterface  {
     public static final short STEPCOUNTER = 7;
     public static final short STEPDETECTOR = 8;
 
-    public static final short DEFAULT = CALIBRATEDGYROSCOPEPROVIDER; // ORIENTATION DEFAULT
-    public static final short STEPDEFAULT = 6;
+    public static final short DEFAULT = IMPROVEDORIENTATIONSENSOR2PROVIDER; // ORIENTATION DEFAULT
+    public static final short STEPDEFAULT = ACCELEROMETER;
 
 
 

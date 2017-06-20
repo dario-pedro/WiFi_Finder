@@ -13,6 +13,7 @@ import org.apache.commons.math3.linear.RealVector;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
@@ -26,8 +27,8 @@ import static com.vrem.wifianalyzer.localization.TrilaterationSolver.solve;
 public class PositionData {
 
 
-    public static final char TRILATERATION = 'c';
-    public static final char MULTILATERATION = 't';
+    public static final char TRILATERATION = 't';
+    public static final char MULTILATERATION = 'm';
 
 
 
@@ -101,8 +102,12 @@ public class PositionData {
             positionEstimated = true;
         }
 
-
+        long startTime = System.currentTimeMillis();
         estimate(p);
+        long endTime   = System.currentTimeMillis();
+        double estimation_runTime = (double)(endTime - startTime);
+        MainContext.INSTANCE.addDoubleTest(estimation_runTime);
+       // System.out.println(totalTime);
 
     }
 
@@ -151,6 +156,7 @@ public class PositionData {
 
     private double[] estimateMultilateration()
     {
+        Date start_time = new Date();
         Pair<double[][],double[]> points = getDoublePoints();
         double[][] positions = points.first;
         double[] distances = points.second;
@@ -173,7 +179,7 @@ public class PositionData {
         } catch (Exception e) {
             Log.d("Multilateration",""+e);
         }
-
+        Log.d("MultilaterationTime"," "+(new Date().getTime() - start_time.getTime()));
         return centroid;
     }
 
@@ -181,7 +187,7 @@ public class PositionData {
     private void estimateTrilateration(PositionPoint p) {
         boolean require_recalculate_estimation = false;
 
-
+        Date start_time1 = new Date();
         if(replace_coordinates(p))
         {
             require_recalculate_estimation = positionEstimated;
@@ -190,7 +196,7 @@ public class PositionData {
             require_recalculate_estimation = addNewPoint(positionEstimated,p);
         }
 
-
+        Date start_time2 = new Date();
 
         if(require_recalculate_estimation)
         {
@@ -206,6 +212,9 @@ public class PositionData {
             MainContext.INSTANCE.addEstimative(highestValues[2]);
             MainContext.INSTANCE.addEstimative(new PositionPoint(estimatedTargetPosition,null));
         }
+        Date end_time = new Date();
+        Log.d("TriangulSelectTime"," "+(end_time.getTime() - start_time1.getTime()));
+        Log.d("TriangulTime"," "+(end_time.getTime() - start_time2.getTime()));
     }
 
 

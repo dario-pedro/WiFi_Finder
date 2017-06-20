@@ -1,5 +1,6 @@
 package com.vrem.wifianalyzer.localization;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.vrem.wifianalyzer.odometry.Coordinates;
 import com.vrem.wifianalyzer.wifi.model.WiFiData;
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail;
@@ -20,6 +21,9 @@ public class PositionPoint implements Cloneable {
 
 
     private Coordinates APestimation ;
+
+    private LatLng mLL;
+
     private List<WiFiDetail> info;
 
 
@@ -41,13 +45,28 @@ public class PositionPoint implements Cloneable {
         this.distance = (info != null && info.size() > -1) ?
             info.get(0).getWiFiSignal().getDistance()*m_to_cm : Double.MAX_VALUE;
 
+        this.mLL = null;
+    }
 
+    public PositionPoint(LatLng ll,Coordinates position, List<WiFiDetail> info) {
+        this.position = position;
+        this.info = info;
+
+        this.store_time = new Date();
+
+        this.APestimation = new Coordinates();
+
+        this.distance = (info != null && info.size() > -1) ?
+                info.get(0).getWiFiSignal().getDistance()*m_to_cm : Double.MAX_VALUE;
+
+        this.mLL = ll;
     }
 
     public PositionPoint(Coordinates position, double angle) {
         this.position = position;
         this.store_time = new Date();
         this.distance = angle;
+        this.mLL = null;
 
 
     }
@@ -96,7 +115,7 @@ public class PositionPoint implements Cloneable {
         return APestimation;
     }
 
-    public void setAPestimation(Coordinates APestimation) {
-        this.APestimation = APestimation;
+    public void setAPestimation(Coordinates _APestimation) {
+        this.APestimation = _APestimation;
     }
 }

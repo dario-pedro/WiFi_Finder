@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,7 +15,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
-        android:src="@drawable/ic_location_on_grey_500_48dp" />
+        android:src="@drawable/ic_location_on_grey_500_48dp"
+        tools:src="@drawable/ic_wifi_green_800_48dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,10 +26,9 @@
         android:id="@+id/launcher_text"
         android:textColor="#9a7f52"
         android:textSize="50sp"
-        android:layout_below="@+id/dario_imageView"
-        android:layout_alignLeft="@+id/dario_imageView"
-        android:layout_alignStart="@+id/dario_imageView"
         style="@style/TextAppearance.AppCompat"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_below="@+id/dario_imageView"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

@@ -123,13 +123,13 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
         PositionPoint currPoint = new PositionPoint(curr_coords,wiFiDetails);
 
         if(mPositionData.isPositionEstimated())
-            currPoint.setAPestimation(mPositionData.getTargetPosition());
+            currPoint.setAPestimation(new Coordinates(mPositionData.getTargetPosition()));
 
         mPositionData.addPoint(currPoint);
 
 
 
-        //TODO CHANGE THE ARROW MOVEMENT, ACCORDING TO ESTIMATIION
+        //CHANGE THE ARROW MOVEMENT, ACCORDING TO ESTIMATIION
         int offset_deegree = (int) - Math.toDegrees(mOdom.getAngle());
 
 

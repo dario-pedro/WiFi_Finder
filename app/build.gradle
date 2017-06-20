@@ -92,7 +92,7 @@ dependencies {
     compile 'com.estimote:sdk:0.9.1'
     //Chat
     compile 'me.himanshusoni.chatmessageview:chat-message-view:1.0.7'
-    //to enable multidex
+    //to enable multidex - for multiply gradle fetch
     compile 'com.android.support:multidex:1.0.1'
     // Unit Test Dependencies
     testCompile 'junit:junit:4.12'
@@ -101,6 +101,7 @@ dependencies {
     testCompile 'com.googlecode.junit-toolbox:junit-toolbox:2.2'
     testCompile 'org.robolectric:robolectric:3.1.4'
     testCompile 'org.robolectric:shadows-support-v4:3.1.4'
+    compile files('libs/joptimizer-4.0.0-sources.jar')
 
 }
 

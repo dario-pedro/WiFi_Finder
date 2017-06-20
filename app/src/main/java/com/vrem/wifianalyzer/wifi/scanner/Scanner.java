@@ -77,7 +77,7 @@ public class Scanner {
         } catch (Exception e) {
             // critical error: set to no results and do not die
         }
-        MainContext.INSTANCE.addDoubleTest((double)scanResults.get(0).level);
+        //MainContext.INSTANCE.addDoubleTest((double)scanResults.get(0).level);
         cache.add(scanResults);
         wiFiData = transformer.transformToWiFiData(cache.getScanResults(), wifiInfo, configuredNetworks);
     }

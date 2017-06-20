@@ -33,6 +33,8 @@ import com.vrem.wifianalyzer.odometry.Odom;
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail;
 import com.vrem.wifianalyzer.wifi.model.WiFiSignal;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -125,12 +127,12 @@ class ExportItem implements NavigationMenuItem {
 
     String getDoublesData(@NonNull List<Double> doubles) {
         StringBuilder result = new StringBuilder();
-        result.append("Accelarometer Information:\n");
-        result.append("(x,y,z) \n\n");
+        result.append("Double Information:\n");
+        //result.append("(x,y,z) \n\n");
 
         int i = 1;
 
-        double[] events = {0d,0d,0d};
+        //double[] events = {0d,0d,0d};
 
         for (Double d : doubles) {
 
@@ -161,31 +163,39 @@ class ExportItem implements NavigationMenuItem {
 
     String getCoordsData(@NonNull List<PositionPoint> coordinates) {
         StringBuilder result = new StringBuilder();
+        DecimalFormat df = new DecimalFormat("#.#####", DecimalFormatSymbols.getInstance());
+
         result.append("Coordinates Information:\n");
         result.append("Date,x,y,distance,PrimaryFrequency,power,ESTx,ESTy\n");
 
-
+        String r = result.toString();
 
         for (PositionPoint positionPoint : coordinates) {
 
+            //adds the Date
             String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(positionPoint.getStore_time());
+            r+= date+",";
 
+            //odometry location
+            String currX = df.format(positionPoint.getPosition().getX()/100);
+            String currY = df.format(positionPoint.getPosition().getY()/100);
+            r+= currX.replace(",",".")+","+currY.replace(",",".")+",";
+
+            //distance to AP
+            String distance = df.format(positionPoint.getDistance()/100);
+            r+= distance.replace(",",".")+",";
+
+            //ws info
             WiFiSignal ws = positionPoint.getInfo().get(0).getWiFiSignal();
+            r+=""+ws.getPrimaryFrequency()+","+ws.getLevel()+",";
 
-                result.append(String.format(Locale.ENGLISH, "%s,%.5f,%.5f,%.5f,%d,%d,%.5f,%.5f\n",
-                        date,
-                        positionPoint.getPosition().getX()/100,
-                        positionPoint.getPosition().getY()/100,
-                        positionPoint.getDistance()/100,
-                        ws.getPrimaryFrequency(),
-                        ws.getLevel(),
-                        positionPoint.getAPestimation().getX()/100,
-                        positionPoint.getAPestimation().getY()/100
-                ));
-
+            //estimation location
+            String estX = df.format(positionPoint.getAPestimation().getX()/100);
+            String estY = df.format(positionPoint.getAPestimation().getY()/100);
+            r+= estX.replace(",",".")+","+estY.replace(",",".")+"\n";
 
         }
-        return result.toString();
+        return r;
     }
 
     String getPositionPointsData(@NonNull List<List<PositionPoint>> list_coordinates) {
