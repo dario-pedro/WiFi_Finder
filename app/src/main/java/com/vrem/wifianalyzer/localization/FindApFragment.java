@@ -15,8 +15,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
+import com.vrem.wifianalyzer.maps.LatLonProvider;
 import com.vrem.wifianalyzer.odometry.Coordinates;
 import com.vrem.wifianalyzer.odometry.Odom;
 import com.vrem.wifianalyzer.settings.Settings;
@@ -36,6 +38,7 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
     private PositionData mPositionData;
     private Odom mOdom;
+    private LatLonProvider mAndroidLocation;
 
     private TextView tvX;
     private TextView tvY;
@@ -72,6 +75,8 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
         tvEY = (TextView) view.findViewById(R.id.textView_estY_value);
 
         mOdom = new Odom();
+
+        mAndroidLocation = new LatLonProvider();
 
         mHandler = new Handler();
 
@@ -112,15 +117,15 @@ public class FindApFragment extends Fragment  implements UpdateNotifier {
 
 
 
-
-
     public void update(WiFiData wiFiData){
         Settings settings = MainContext.INSTANCE.getSettings();
         wiFiDetails = wiFiData.getWiFiDetails(settings.getWiFiBand(), settings.getSortBy(), settings.getGroupBy());
 
         Coordinates curr_coords = new Coordinates(mOdom.getCoords());
+        LatLng latLng = mAndroidLocation.getmCurrLL();
 
-        PositionPoint currPoint = new PositionPoint(curr_coords,wiFiDetails);
+        PositionPoint currPoint = new PositionPoint(latLng,curr_coords,wiFiDetails);
+
 
         if(mPositionData.isPositionEstimated())
             currPoint.setAPestimation(new Coordinates(mPositionData.getTargetPosition()));

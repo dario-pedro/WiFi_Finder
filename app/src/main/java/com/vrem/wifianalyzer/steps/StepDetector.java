@@ -21,6 +21,12 @@ public class StepDetector implements SensorEventListener {
 
 	}
 
+
+	public StepDetector(OdomInterface stepEvent) {
+		super();
+		this.stepEvent = stepEvent;
+	}
+
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 

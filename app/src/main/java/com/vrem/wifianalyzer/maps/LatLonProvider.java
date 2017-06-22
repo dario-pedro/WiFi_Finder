@@ -18,8 +18,7 @@ import com.vrem.wifianalyzer.MainContext;
  * Created by Dário on 20/06/2017.
  */
 
-public class LatLonProvider implements OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks,
+public class LatLonProvider implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         com.google.android.gms.location.LocationListener {
 
@@ -33,6 +32,13 @@ public class LatLonProvider implements OnMapReadyCallback,
     private final int LOCATION_REQUEST_INTERVAL;
     private final int LOCATION_REQUEST_FASTINTERVAL;
 
+    public LatLng getmCurrLL() {
+        return mCurrLL;
+    }
+
+    public void setmCurrLL(LatLng mCurrLL) {
+        this.mCurrLL = mCurrLL;
+    }
 
     public LatLonProvider() {
         LOCATION_REQUEST_INTERVAL = 1000;
@@ -75,6 +81,8 @@ public class LatLonProvider implements OnMapReadyCallback,
     }
 
 
+
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
@@ -111,11 +119,14 @@ public class LatLonProvider implements OnMapReadyCallback,
 
     @Override
     public void onLocationChanged(Location location) {
-
+        mCurrLL = new LatLng(location.getLatitude(),location.getLongitude());
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
+
+
+    public void disconnect(){
+        mGoogleApiClient.disconnect();
+
 
     }
 }

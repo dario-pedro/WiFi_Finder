@@ -22,6 +22,14 @@ public class PositionPoint implements Cloneable {
 
     private Coordinates APestimation ;
 
+    public LatLng getmLL() {
+        return mLL;
+    }
+
+    public void setmLL(LatLng mLL) {
+        this.mLL = mLL;
+    }
+
     private LatLng mLL;
 
     private List<WiFiDetail> info;
@@ -30,7 +38,7 @@ public class PositionPoint implements Cloneable {
 
     private static final double m_to_cm = 100.0;
 
-    private double distance;
+    public double distance;
 
     Date store_time;
 

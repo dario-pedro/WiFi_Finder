@@ -24,6 +24,7 @@ import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.vrem.wifianalyzer.MainActivity;
 import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
@@ -166,7 +167,7 @@ class ExportItem implements NavigationMenuItem {
         DecimalFormat df = new DecimalFormat("#.#####", DecimalFormatSymbols.getInstance());
 
         result.append("Coordinates Information:\n");
-        result.append("Date,x,y,distance,PrimaryFrequency,power,ESTx,ESTy\n");
+        result.append("Date,x,y,distance,PrimaryFrequency,power,ESTx,ESTy,GPS_LATR,GPS_LONG\n");
 
         String r = result.toString();
 
@@ -192,7 +193,19 @@ class ExportItem implements NavigationMenuItem {
             //estimation location
             String estX = df.format(positionPoint.getAPestimation().getX()/100);
             String estY = df.format(positionPoint.getAPestimation().getY()/100);
-            r+= estX.replace(",",".")+","+estY.replace(",",".")+"\n";
+            r+= estX.replace(",",".")+","+estY.replace(",",".");
+
+            //Android Location estimation
+            LatLng latLng = positionPoint.getmLL();
+            if(latLng != null) {
+                String lat = df.format(latLng.latitude);
+                String lon = df.format(latLng.longitude);
+                r+= lat.replace(",",".")+","+lon.replace(",",".")+"\n";
+            }
+            else {
+                r+= "\n";
+            }
+
 
         }
         return r;

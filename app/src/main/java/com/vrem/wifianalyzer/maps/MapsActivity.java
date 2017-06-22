@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -46,6 +47,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     TextView mOutputLat, mOutputLon, mOutputStreet;
 
+    ImageView mMovementSymbol;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +61,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mOutputStreet = (TextView) findViewById(R.id.tvRua);
         mCurrSpot = "";
         setPlace(mCurrSpot);
+
+        /*mMovementSymbol = (ImageView) findViewById(R.id.ivMov);
+        mMovementSymbol.setImageResource(R.drawable.icon_question_mark_48);*/
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

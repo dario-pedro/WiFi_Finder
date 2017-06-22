@@ -30,7 +30,11 @@ public class StepCounter implements SensorEventListener {
 		first_time = true;
 	}
 
-
+	public StepCounter(OdomInterface stepEvent) {
+		super();
+		first_time = true;
+		this.stepEvent = stepEvent;
+	}
 
 	// public void onSensorChanged(int sensor, float[] values) {
 	@Override
