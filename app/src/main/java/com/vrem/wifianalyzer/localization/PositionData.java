@@ -106,7 +106,7 @@ public class PositionData {
         estimate(p);
         long endTime   = System.currentTimeMillis();
         double estimation_runTime = (double)(endTime - startTime);
-        MainContext.INSTANCE.addDoubleTest(estimation_runTime);
+        //MainContext.INSTANCE.addDoubleTest(estimation_runTime);
        // System.out.println(totalTime);
 
     }

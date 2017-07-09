@@ -25,6 +25,7 @@ import android.support.annotation.NonNull;
 
 import com.vrem.wifianalyzer.localization.PositionPoint;
 import com.vrem.wifianalyzer.odometry.Coordinates;
+import com.vrem.wifianalyzer.odometry.MutipleDistanceMeasurements;
 import com.vrem.wifianalyzer.odometry.Odom;
 import com.vrem.wifianalyzer.settings.Settings;
 import com.vrem.wifianalyzer.vendor.model.Database;
@@ -45,9 +46,21 @@ public enum MainContext {
     private Configuration configuration;
     private List<PositionPoint> mEstimativesList;
     private List<List<PositionPoint>> mAllPointsList;
+    private List<MutipleDistanceMeasurements> mGPSandOdom;
     private List<Double> mTests;
 
+    public List<MutipleDistanceMeasurements> getGPSandOdom() {
+        return mGPSandOdom;
+    }
 
+    public void setGPSandOdom(List<MutipleDistanceMeasurements> mGPSandOdom) {
+        this.mGPSandOdom = mGPSandOdom;
+    }
+
+    public void addGPSandOdom(MutipleDistanceMeasurements mutipleDistanceMeasurements)
+    {
+        mGPSandOdom.add(mutipleDistanceMeasurements);
+    }
     public List<Double> getmTests() {
         return mTests;
     }
@@ -146,6 +159,8 @@ public enum MainContext {
         mAllPointsList = new ArrayList<List<PositionPoint>>();
 
         mTests = new ArrayList<Double>();
+
+        mGPSandOdom = new ArrayList<MutipleDistanceMeasurements>();
 
         /**
          * Initialize the 5 lists to be debugged

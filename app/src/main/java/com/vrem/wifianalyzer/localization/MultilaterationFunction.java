@@ -11,9 +11,6 @@ import org.apache.commons.math3.util.Pair;
  * Models the Multilateration problem. This is a formulation for a nonlinear least
  * squares optimizer.
  *
- * @author Scott Wiedemann
- * https://github.com/lemmingapex/Trilateration
- *
  */
 public class MultilaterationFunction implements MultivariateJacobianFunction {
 

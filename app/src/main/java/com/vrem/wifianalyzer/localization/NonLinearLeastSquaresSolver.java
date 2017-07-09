@@ -15,8 +15,6 @@ import java.util.Date;
  * Solves a Multilateration problem with an instance of a
  * {@link LeastSquaresOptimizer}
  *
- * @author Scott Wiedemann
- * https://github.com/lemmingapex/Trilateration
  *
  */
 public class NonLinearLeastSquaresSolver {

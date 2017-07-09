@@ -30,6 +30,7 @@ import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
 import com.vrem.wifianalyzer.localization.PositionPoint;
 import com.vrem.wifianalyzer.odometry.Coordinates;
+import com.vrem.wifianalyzer.odometry.MutipleDistanceMeasurements;
 import com.vrem.wifianalyzer.odometry.Odom;
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail;
 import com.vrem.wifianalyzer.wifi.model.WiFiSignal;
@@ -53,6 +54,7 @@ class ExportItem implements NavigationMenuItem {
         List<PositionPoint> estimatives = getCoordsDetails();
         List<List<PositionPoint>> allPoints = getPositionPointsDetails();
         List<Double> dTests = getDoubleTests();
+        List<MutipleDistanceMeasurements> gpsAndOdom = getGpsAndOdom();
 
 
         if (!dataAvailable(wiFiDetails)) {
@@ -78,6 +80,12 @@ class ExportItem implements NavigationMenuItem {
         {
             data += "\n";
             data += getDoublesData(dTests);
+        }
+
+        if(!gpsAndOdom.isEmpty())
+        {
+            data += "\n";
+            data += getGpsAndOdomData(gpsAndOdom);
         }
 
         Intent intent = createIntent(title, data);
@@ -161,10 +169,43 @@ class ExportItem implements NavigationMenuItem {
         return result.toString();
     }
 
+    String getGpsAndOdomData(@NonNull List<MutipleDistanceMeasurements> listMDM) {
+        StringBuilder result = new StringBuilder();
+        DecimalFormat df = new DecimalFormat("#.#######", DecimalFormatSymbols.getInstance());
+
+        result.append("Gps And Odom Info Information:\n");
+        result.append("X,Y,GPS_LAT,GPS,LONG:\n");
+
+        String r = result.toString();
+
+        for (MutipleDistanceMeasurements mdm : listMDM) {
+
+
+            //odometry location
+            String currX = df.format(mdm.mOdometryCoords.getX()/100);
+            String currY = df.format(mdm.mOdometryCoords.getY()/100);
+            r+= currX.replace(",",".")+","+currY.replace(",",".")+",";
+
+            //Android Location estimation
+            LatLng latLng = mdm.mAndroidLocationCoords;
+            if(latLng != null) {
+                String lat = df.format(latLng.latitude);
+                String lon = df.format(latLng.longitude);
+                r+= lat.replace(",",".")+","+lon.replace(",",".")+"\n";
+            }
+            else {
+                r+= "\n";
+            }
+
+        }
+
+        return r;
+    }
+
 
     String getCoordsData(@NonNull List<PositionPoint> coordinates) {
         StringBuilder result = new StringBuilder();
-        DecimalFormat df = new DecimalFormat("#.#####", DecimalFormatSymbols.getInstance());
+        DecimalFormat df = new DecimalFormat("#.#######", DecimalFormatSymbols.getInstance());
 
         result.append("Coordinates Information:\n");
         result.append("Date,x,y,distance,PrimaryFrequency,power,ESTx,ESTy,GPS_LATR,GPS_LONG\n");
@@ -193,7 +234,7 @@ class ExportItem implements NavigationMenuItem {
             //estimation location
             String estX = df.format(positionPoint.getAPestimation().getX()/100);
             String estY = df.format(positionPoint.getAPestimation().getY()/100);
-            r+= estX.replace(",",".")+","+estY.replace(",",".");
+            r+= estX.replace(",",".")+","+estY.replace(",",".")+",";
 
             //Android Location estimation
             LatLng latLng = positionPoint.getmLL();
@@ -273,6 +314,10 @@ class ExportItem implements NavigationMenuItem {
 
     private List<Double> getDoubleTests() {
         return MainContext.INSTANCE.getmTests();
+    }
+
+    private List<MutipleDistanceMeasurements> getGpsAndOdom() {
+        return MainContext.INSTANCE.getGPSandOdom();
     }
 
     private List<List<PositionPoint>> getPositionPointsDetails() {

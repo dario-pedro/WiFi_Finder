@@ -13,8 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.vrem.wifianalyzer.MainContext;
 import com.vrem.wifianalyzer.R;
+import com.vrem.wifianalyzer.maps.LatLonProvider;
+
 import java.text.DecimalFormat;
 
 
@@ -25,6 +28,8 @@ public class OdometryFragment extends Fragment {
     private TextView tvY;
 
     private Odom mOdom;
+
+    private LatLonProvider mAndroidLocation;
 
     private Handler mHandler;
 
@@ -60,6 +65,7 @@ public class OdometryFragment extends Fragment {
         mOdom = new Odom();
 
         mHandler = new Handler();
+        mAndroidLocation = new LatLonProvider();
 
         ui_update  = new Thread() {
             public void run() {
@@ -73,11 +79,12 @@ public class OdometryFragment extends Fragment {
 
                             tvX.setText(""+formatDouble(c.getX()));
                             tvY.setText(""+formatDouble(c.getY()));
+                            saveData(c);
                         }
                     });
 
                     try {
-                        Thread.sleep(150);
+                        Thread.sleep(250);
                     }
                     catch (InterruptedException e) {
                         e.printStackTrace();
@@ -90,6 +97,18 @@ public class OdometryFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void saveData(Coordinates odomCoords) {
+
+        LatLng latLng = mAndroidLocation.getmCurrLL();
+
+        //require to copy the coords to a new variable soo the pointers are not the same on the array
+        Coordinates odomC = new Coordinates(odomCoords);
+
+        MutipleDistanceMeasurements mdm = new MutipleDistanceMeasurements(odomC,latLng);
+        MainContext.INSTANCE.addGPSandOdom(mdm);
+
     }
 
     private Thread ui_update ;
