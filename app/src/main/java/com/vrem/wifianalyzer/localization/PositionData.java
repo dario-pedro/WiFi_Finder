@@ -60,7 +60,7 @@ public class PositionData {
     /**
      * MIN VALUE IS 3
      */
-    private int MAX_POINTS_STORAGE = 25;
+    private int MAX_POINTS_STORAGE = 30;
 
 
     public PositionData() {
